@@ -1,24 +1,49 @@
-# E-Commerce Website
+# 🖥️ TECHSNACC – Full Stack E-commerce Website
 
-This is a full-stack e-commerce website built using:
+TECHSNACC is a full-stack e-commerce web application built using React, Node.js, Express, and MongoDB. It allows users to browse computer accessories, manage cart items, place orders (COD/Stripe), and track profiles — just like a real online store.
 
-- React (Frontend)
-- Node.js + Express (Backend)
-- MongoDB (Database)
+![TECHSNACC Preview](https://your-image-link-if-any.png)
 
-## Features
+---
 
-- User login/signup
-- Product listing
-- Cart management
-- Order placement
-- Payment
-- otp generation
+## 🚀 Tech Stack
 
-## How to run
+**Frontend:**
+- React
+- Tailwind CSS
+- React Router DOM
+- Context API
 
-1. Clone the repo
-2. Run `npm i` in both frontend and backend
-3. Start frontend: `npm run dev`
-4. Start backend: `nodemon`
+**Backend:**
+- Node.js
+- Express.js
+- MongoDB
+- JWT (Authentication)
+- Stripe (Payment Gateway)
+- PDFKit (Invoice Generation)
 
+---
+
+## 📦 Features
+
+- 🔐 User Authentication (Signup, Login, Verify Email, Reset Password)
+- 🛒 Cart, Wishlist, Product View, Quantity Controls
+- 💳 COD & Stripe Payment Integration
+- 📄 PDF Invoice Download after Purchase
+- 🧾 Order Tracking & Order History
+- 📊 Admin Dashboard for Analytics (Sales, Orders, Revenue)
+- 🏷️ Bestsellers, Category Filters
+
+---
+
+## 🧠 Project Structure
+
+```bash
+/TECHSNACC
+├── frontend
+│   ├── src/
+│   └── ...
+└── backend
+    ├── controllers/
+    ├── models/
+    └── routes/
