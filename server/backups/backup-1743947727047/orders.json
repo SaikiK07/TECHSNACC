@@ -1,0 +1,522 @@
+[
+  {
+    "_id": "67e2b59b429c68ed09e37cfc",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b134429c68ed09e37c87",
+        "name": "GIGABYTE Geforce RTX 3050 Windforce pci_e Oc 6G 6Gb Gddr6 Graphics Card Gv-N3050Wf2Oc-6Gd",
+        "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+        "price": 17999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7879635645e3af287461a",
+          "name": "gpu",
+          "attributes": [
+            "4gb",
+            "6gb",
+            "8gb"
+          ],
+          "__v": 0
+        },
+        "brand": "NVIDIA",
+        "date": 1742909748957,
+        "averageRating": 3,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "8gb",
+        "quantity": 1
+      }
+    ],
+    "amount": 18099,
+    "address": {
+      "firstName": "eaf",
+      "lastName": "asf",
+      "email": "admin@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "423423"
+    },
+    "status": "Packing",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1742910875231,
+    "__v": 0
+  },
+  {
+    "_id": "67e37e59036da17a69c9a76f",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b134429c68ed09e37c87",
+        "name": "GIGABYTE Geforce RTX 3050 Windforce pci_e Oc 6G 6Gb Gddr6 Graphics Card Gv-N3050Wf2Oc-6Gd",
+        "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+        "price": 17999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7879635645e3af287461a",
+          "name": "gpu",
+          "attributes": [
+            "4gb",
+            "6gb",
+            "8gb"
+          ],
+          "__v": 0
+        },
+        "brand": "NVIDIA",
+        "date": 1742909748957,
+        "averageRating": 3,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "8gb",
+        "quantity": 5
+      }
+    ],
+    "amount": 90095,
+    "address": {
+      "firstName": "axat",
+      "lastName": "axat",
+      "email": "axat@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "98989898998"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "Stripe",
+    "payment": true,
+    "date": 1742962265136,
+    "__v": 0
+  },
+  {
+    "_id": "67e37f32036da17a69c9a78d",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b134429c68ed09e37c87",
+        "name": "GIGABYTE Geforce RTX 3050 Windforce pci_e Oc 6G 6Gb Gddr6 Graphics Card Gv-N3050Wf2Oc-6Gd",
+        "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+        "price": 17999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7879635645e3af287461a",
+          "name": "gpu",
+          "attributes": [
+            "4gb",
+            "6gb",
+            "8gb"
+          ],
+          "__v": 0
+        },
+        "brand": "NVIDIA",
+        "date": 1742909748957,
+        "averageRating": 3,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "8gb",
+        "quantity": 3
+      }
+    ],
+    "amount": 54097,
+    "address": {
+      "firstName": "axat",
+      "lastName": "asf",
+      "email": "abc@gmai.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "423423"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "Stripe",
+    "payment": true,
+    "date": 1742962482670,
+    "__v": 0
+  },
+  {
+    "_id": "67e577ec104e979592d1decc",
+    "userId": "67e38670036da17a69c9a812",
+    "items": [
+      {
+        "_id": "67e2b134429c68ed09e37c87",
+        "name": "GIGABYTE Geforce RTX 3050 Windforce pci_e Oc 6G 6Gb Gddr6 Graphics Card Gv-N3050Wf2Oc-6Gd",
+        "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+        "price": 17999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7879635645e3af287461a",
+          "name": "gpu",
+          "attributes": [
+            "4gb",
+            "6gb",
+            "8gb"
+          ],
+          "__v": 0
+        },
+        "brand": "NVIDIA",
+        "date": 1742909748957,
+        "averageRating": 3,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "6gb",
+        "quantity": 2
+      }
+    ],
+    "amount": 36098,
+    "address": {
+      "firstName": "fasfasgdsgdfgd",
+      "lastName": "axat",
+      "email": "admin@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "423423"
+    },
+    "status": "Packing",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1743091692538,
+    "__v": 0
+  },
+  {
+    "_id": "67e622dfa186680623368a38",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b173429c68ed09e37c8d",
+        "name": "Samsung Essential Series 1800R Curved Monitor 24 Inch (59.8 cm) FHD",
+        "description": "Samsung 24 Inch Curved FHD 1,920 x 1,080 Resolution VA Display Monitor\r\nAspect Ratio: 16:09 | 178°(H)/178°(V) Viewing Angle | 16.7 Million Color Support | 250 cd/㎡ Brightness (Typical) | 3,000:1 Contrast Ratio | Refresh Rate: 100 Hz | Response Time: 4.0 ms (GTG)",
+        "price": 7999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/dm57batm83mjhr3zn0w4.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/iuabsuhlzvv67naukfkf.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/mel4ewsmswegjn50lvja.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7870135645e3af2874612",
+          "name": "monitor",
+          "attributes": [
+            "60hz",
+            "120hz",
+            "240hz"
+          ],
+          "__v": 0
+        },
+        "brand": "SAMSUNG",
+        "date": 1742909811766,
+        "averageRating": 4,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "240hz",
+        "quantity": 2
+      }
+    ],
+    "amount": 16098,
+    "address": {
+      "firstName": "axat",
+      "lastName": "axat",
+      "email": "axat@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "423423"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1743135455020,
+    "__v": 0
+  },
+  {
+    "_id": "67f232651dc04bd2e0483da9",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b134429c68ed09e37c87",
+        "name": "GIGABYTE Geforce RTX 3050 6Gb Gddr6 Graphics Card",
+        "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+        "price": 17999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7879635645e3af287461a",
+          "name": "gpu",
+          "attributes": [
+            "4gb",
+            "6gb",
+            "8gb"
+          ],
+          "__v": 0
+        },
+        "brand": "NVIDIA",
+        "date": 1743919415896,
+        "averageRating": 3,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "8gb",
+        "quantity": 1
+      }
+    ],
+    "amount": 18099,
+    "address": {
+      "firstName": "eaf",
+      "lastName": "asf",
+      "email": "admin@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "423423"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1743925861333,
+    "__v": 0
+  },
+  {
+    "_id": "67f281b120a620c6a043f30c",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b173429c68ed09e37c8d",
+        "name": "Samsung Essential Series 1800R Curved Monitor 24 Inch FHD",
+        "description": "Samsung 24 Inch Curved FHD 1,920 x 1,080 Resolution VA Display Monitor\r\nAspect Ratio: 16:09 | 178°(H)/178°(V) Viewing Angle | 16.7 Million Color Support | 250 cd/㎡ Brightness (Typical) | 3,000:1 Contrast Ratio | Refresh Rate: 100 Hz | Response Time: 4.0 ms (GTG)",
+        "price": 7999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/dm57batm83mjhr3zn0w4.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/iuabsuhlzvv67naukfkf.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/mel4ewsmswegjn50lvja.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7870135645e3af2874612",
+          "name": "monitor",
+          "attributes": [
+            "60hz",
+            "120hz",
+            "240hz"
+          ],
+          "__v": 0
+        },
+        "brand": "Saumsung",
+        "date": 1743919460507,
+        "averageRating": 4.5,
+        "totalRatings": 2,
+        "__v": 0,
+        "attributes": "120hz",
+        "quantity": 1
+      }
+    ],
+    "amount": 8099,
+    "address": {
+      "firstName": "edfsv",
+      "lastName": "ac",
+      "email": "admin@gmail.com",
+      "street": "vd",
+      "city": "dfb",
+      "state": "df",
+      "zipcode": "393001",
+      "country": "dfb",
+      "phone": "423423"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1743946161741,
+    "__v": 0
+  },
+  {
+    "_id": "67f281e520a620c6a043f316",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b1ed429c68ed09e37ca4",
+        "name": "Logitech G502 Hero  Wired USB Gaming Mouse 25,600 DPI",
+        "description": "HERO Sensor: Next generation HERO sensor delivers precision tracking up to 25,600 DPI with zero smoothing, filtering, or acceleration.\r\n11 Programmable Buttons:11 programmable buttons and dual-mode hyper-fast scroll wheel give you fully customizable control over your gameplay.\r\nAdjustable Weights:Arrange up to five 3.6g weights for personalized weight and balance configuration.\r\n",
+        "price": 4100,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909932/hzyymrh1yqjinogf8hew.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909933/r3wkbxii3cxszcqogptp.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909932/xaldwxsbrapfauwuzbyb.jpg"
+        ],
+        "bestseller": false,
+        "category": {
+          "_id": "67d784f235645e3af2874601",
+          "name": "mouse",
+          "attributes": [
+            "400dpi",
+            "800dpi",
+            "1600dpi"
+          ],
+          "__v": 0
+        },
+        "brand": "Logitech",
+        "date": 1743919486745,
+        "averageRating": 0,
+        "totalRatings": 0,
+        "__v": 0,
+        "attributes": "1600dpi",
+        "quantity": 1
+      }
+    ],
+    "amount": 4200,
+    "address": {
+      "firstName": "axat",
+      "lastName": "axat",
+      "email": "axat@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "9856437466"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1743946213495,
+    "__v": 0
+  },
+  {
+    "_id": "67f2827120a620c6a043f324",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b134429c68ed09e37c87",
+        "name": "GIGABYTE Geforce RTX 3050 6Gb Gddr6 Graphics Card",
+        "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+        "price": 17999,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+        ],
+        "bestseller": true,
+        "category": {
+          "_id": "67d7879635645e3af287461a",
+          "name": "gpu",
+          "attributes": [
+            "4gb",
+            "6gb",
+            "8gb"
+          ],
+          "__v": 0
+        },
+        "brand": "NVIDIA",
+        "date": 1743919415896,
+        "averageRating": 3,
+        "totalRatings": 1,
+        "__v": 0,
+        "attributes": "8gb",
+        "quantity": 1
+      }
+    ],
+    "amount": 18099,
+    "address": {
+      "firstName": "fa",
+      "lastName": "csca",
+      "email": "axat@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "9584759633"
+    },
+    "status": "Order Placed",
+    "paymentMethod": "COD",
+    "payment": false,
+    "date": 1743946353597,
+    "__v": 0
+  },
+  {
+    "_id": "67f2844f20a620c6a043f357",
+    "userId": "67d7892735645e3af2874626",
+    "items": [
+      {
+        "_id": "67e2b1ed429c68ed09e37ca4",
+        "name": "Logitech G502 Hero  Wired USB Gaming Mouse 25,600 DPI",
+        "description": "HERO Sensor: Next generation HERO sensor delivers precision tracking up to 25,600 DPI with zero smoothing, filtering, or acceleration.\r\n11 Programmable Buttons:11 programmable buttons and dual-mode hyper-fast scroll wheel give you fully customizable control over your gameplay.\r\nAdjustable Weights:Arrange up to five 3.6g weights for personalized weight and balance configuration.\r\n",
+        "price": 4100,
+        "image": [
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909932/hzyymrh1yqjinogf8hew.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909933/r3wkbxii3cxszcqogptp.jpg",
+          "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909932/xaldwxsbrapfauwuzbyb.jpg"
+        ],
+        "bestseller": false,
+        "category": {
+          "_id": "67d784f235645e3af2874601",
+          "name": "mouse",
+          "attributes": [
+            "400dpi",
+            "800dpi",
+            "1600dpi"
+          ],
+          "__v": 0
+        },
+        "brand": "Logitech",
+        "date": 1743919486745,
+        "averageRating": 0,
+        "totalRatings": 0,
+        "__v": 0,
+        "attributes": "1600dpi",
+        "quantity": 6
+      }
+    ],
+    "amount": 24700,
+    "address": {
+      "firstName": "axat",
+      "lastName": "axat",
+      "email": "axat@gmail.com",
+      "street": "B-28,VACHANAMRUT SOCIETY,ANKLESHWAR",
+      "city": "ANKLESHWAR",
+      "state": "GUJARAT",
+      "zipcode": "393001",
+      "country": "india",
+      "phone": "9459594594"
+    },
+    "status": "Out for delivery",
+    "paymentMethod": "Stripe",
+    "payment": true,
+    "date": 1743946831370,
+    "__v": 0
+  }
+]

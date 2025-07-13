@@ -1,0 +1,51 @@
+[
+  {
+    "_id": "67d784f235645e3af2874601",
+    "name": "Mouse",
+    "attributes": [
+      "400dpi",
+      "800dpi",
+      "1600dpi"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "67d7870135645e3af2874612",
+    "name": "Monitor",
+    "attributes": [
+      "60hz",
+      "120hz",
+      "240hz"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "67d7879635645e3af287461a",
+    "name": "GPU",
+    "attributes": [
+      "4gb",
+      "6gb",
+      "8gb"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "67d787b235645e3af287461c",
+    "name": "Keyboard",
+    "attributes": [
+      "wired",
+      "wireless"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "67f21a5496442eb6330dd6de",
+    "name": "Color",
+    "attributes": [
+      "Red",
+      "Green",
+      "White"
+    ],
+    "__v": 0
+  }
+]

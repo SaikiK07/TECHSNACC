@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "67b6d5d0de56659bae68e1d7",
+    "name": "abc",
+    "username": "abc",
+    "email": "abc@gmail.com",
+    "password": "$2b$10$7Puj8IHoo/7azR1.4QTQveTMROJ83D9vZide7ftBzosxYdt4i17mO",
+    "verifyOtp": "159499",
+    "verifyOtpExpireAt": 1744013762177,
+    "isAccountVerified": false,
+    "resetOtp": "",
+    "resetOtpExpireAt": 0,
+    "__v": 0,
+    "cartData": {
+      "67d7868235645e3af287460e": {
+        "white": 0
+      },
+      "67d7873d35645e3af2874616": {
+        "120hz": 1
+      },
+      "67d7882a35645e3af2874620": {
+        "wireless": 1
+      }
+    }
+  },
+  {
+    "_id": "67d7892735645e3af2874626",
+    "name": "axat",
+    "username": "saikii",
+    "email": "axatparmar8@gmail.com",
+    "password": "$2b$10$ZyGHVq1MCdBMwSSqMNPr0.c3GVB1HKXqa1mjyZNoVJcA8OlEunJQy",
+    "verifyOtp": "",
+    "verifyOtpExpireAt": 0,
+    "isAccountVerified": true,
+    "resetOtp": "",
+    "resetOtpExpireAt": 0,
+    "cartData": {},
+    "__v": 0
+  },
+  {
+    "_id": "67e38670036da17a69c9a812",
+    "name": "meghna",
+    "username": "meghna",
+    "email": "meghnashukla77@gmail.com",
+    "password": "$2b$10$WJhWMrgvw5jMqJMHyPSvG.F5u55saqw5mIuI/qBlywv.AxcaJHCiK",
+    "verifyOtp": "",
+    "verifyOtpExpireAt": 0,
+    "isAccountVerified": true,
+    "resetOtp": "",
+    "resetOtpExpireAt": 0,
+    "cartData": {},
+    "__v": 0
+  },
+  {
+    "_id": "67f27df920a620c6a043f261",
+    "name": "sonic",
+    "username": "sonicg",
+    "email": "sonicg236@gmail.com",
+    "password": "$2b$10$7FWPshjDzPpb.U8Aac9Cju7pvoPXvAZeMG8L7O2zpRn63X8mqufgC",
+    "verifyOtp": "283456",
+    "verifyOtpExpireAt": 1744032516492,
+    "isAccountVerified": false,
+    "resetOtp": "",
+    "resetOtpExpireAt": 0,
+    "cartData": {
+      "67e2b134429c68ed09e37c87": {
+        "6gb": 1
+      }
+    },
+    "__v": 0
+  }
+]

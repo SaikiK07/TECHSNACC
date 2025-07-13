@@ -1,0 +1,75 @@
+[
+  {
+    "_id": "67e2b134429c68ed09e37c87",
+    "name": "GIGABYTE Geforce RTX 3050 6Gb Gddr6 Graphics Card",
+    "description": "NVIDIA Ampere Streaming Multiprocessors\r\n2nd Generation RT Cores\r\n3rd Generation Tensor Cores\r\nPowered by GeForce RTX 3050",
+    "price": 17999,
+    "image": [
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fxmxingdrrx4t62sllyt.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/splrjjhvqv32oso1zqoo.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909748/fp78mrewqjr9xqxhgxd9.jpg"
+    ],
+    "bestseller": true,
+    "category": "67d7879635645e3af287461a",
+    "brand": "NVIDIA",
+    "date": 1743919415896,
+    "averageRating": 3,
+    "totalRatings": 1,
+    "__v": 0
+  },
+  {
+    "_id": "67e2b173429c68ed09e37c8d",
+    "name": "Samsung Essential Series 1800R Curved Monitor 24 Inch FHD",
+    "description": "Samsung 24 Inch Curved FHD 1,920 x 1,080 Resolution VA Display Monitor\r\nAspect Ratio: 16:09 | 178°(H)/178°(V) Viewing Angle | 16.7 Million Color Support | 250 cd/㎡ Brightness (Typical) | 3,000:1 Contrast Ratio | Refresh Rate: 100 Hz | Response Time: 4.0 ms (GTG)",
+    "price": 7999,
+    "image": [
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/dm57batm83mjhr3zn0w4.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/iuabsuhlzvv67naukfkf.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909811/mel4ewsmswegjn50lvja.jpg"
+    ],
+    "bestseller": true,
+    "category": "67d7870135645e3af2874612",
+    "brand": "Saumsung",
+    "date": 1743919460507,
+    "averageRating": 4.5,
+    "totalRatings": 2,
+    "__v": 0
+  },
+  {
+    "_id": "67e2b1ed429c68ed09e37ca4",
+    "name": "Logitech G502 Hero  Wired USB Gaming Mouse 25,600 DPI",
+    "description": "HERO Sensor: Next generation HERO sensor delivers precision tracking up to 25,600 DPI with zero smoothing, filtering, or acceleration.\r\n11 Programmable Buttons:11 programmable buttons and dual-mode hyper-fast scroll wheel give you fully customizable control over your gameplay.\r\nAdjustable Weights:Arrange up to five 3.6g weights for personalized weight and balance configuration.\r\n",
+    "price": 4100,
+    "image": [
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909932/hzyymrh1yqjinogf8hew.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909933/r3wkbxii3cxszcqogptp.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742909932/xaldwxsbrapfauwuzbyb.jpg"
+    ],
+    "bestseller": true,
+    "category": "67d784f235645e3af2874601",
+    "brand": "Logitech",
+    "date": 1743919486745,
+    "averageRating": 0,
+    "totalRatings": 0,
+    "__v": 0
+  },
+  {
+    "_id": "67e2b342429c68ed09e37cc0",
+    "name": "Logitech Mechanical Gaming Keyboard LED Backlit 68 Keys",
+    "description": "Mechanical red switch: characterized for being linear and smoother, slight key sound has no paragraph sense with minimal resistance, but fast action without a tactile bump feel which makes it easier to tap the keyboard.",
+    "price": 1700,
+    "image": [
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742910273/z4lrklwz8rvrhqp3qfek.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742910274/x4hu2yfmt4ur13asq7pm.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742910274/jkq0fcinceyr1ukbhwzv.jpg",
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1742910274/u0n7fhzfv4lonaavskpw.jpg"
+    ],
+    "bestseller": false,
+    "category": "67d787b235645e3af287461c",
+    "brand": "Logitech",
+    "date": 1743947569131,
+    "averageRating": 5,
+    "totalRatings": 1,
+    "__v": 0
+  }
+]

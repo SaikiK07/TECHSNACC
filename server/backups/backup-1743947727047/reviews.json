@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "67e2b18f429c68ed09e37c97",
+    "userId": "67d7892735645e3af2874626",
+    "productId": "67e2b173429c68ed09e37c8d",
+    "rating": 4,
+    "comment": "best service",
+    "createdAt": "2025-03-25T13:37:19.007Z",
+    "__v": 0
+  },
+  {
+    "_id": "67e2b507429c68ed09e37ce7",
+    "userId": "67d7892735645e3af2874626",
+    "productId": "67e2b134429c68ed09e37c87",
+    "rating": 3,
+    "comment": "its really good product but it heats alot and a bit noisy",
+    "createdAt": "2025-03-25T13:52:07.092Z",
+    "__v": 0
+  },
+  {
+    "_id": "67e38364036da17a69c9a7d8",
+    "userId": "67d7892735645e3af2874626",
+    "productId": "67e2b0d9429c68ed09e37c81",
+    "rating": 4,
+    "comment": "Fast delivert",
+    "createdAt": "2025-03-26T04:32:36.243Z",
+    "__v": 0
+  },
+  {
+    "_id": "67e63d6a93de892c81247340",
+    "userId": "67b6d5d0de56659bae68e1d7",
+    "productId": "67e2b342429c68ed09e37cc0",
+    "rating": 5,
+    "comment": "nice keys",
+    "createdAt": "2025-03-28T06:10:50.997Z",
+    "__v": 0
+  },
+  {
+    "_id": "67e63d9d93de892c81247354",
+    "userId": "67b6d5d0de56659bae68e1d7",
+    "productId": "67e2b173429c68ed09e37c8d",
+    "rating": 5,
+    "comment": "nice picture quality",
+    "createdAt": "2025-03-28T06:11:41.789Z",
+    "__v": 0
+  }
+]

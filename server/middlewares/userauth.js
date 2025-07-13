@@ -1,0 +1,29 @@
+import jwt from 'jsonwebtoken'
+
+const userauth = async(req,res,next)=>{
+
+    const {token} = req.cookies
+
+    if (!token) {
+        return res.json({success:false,message:'Not Authorized Login Again'})
+    }
+
+    try {
+        
+        const token_decode =jwt.verify(token,process.env.JWT_SECERT)
+        if (token_decode.id) {
+            req.body.userId =token_decode.id;
+        } else {
+            return res.json({success:false,message:'Not Authorized Login Again'})
+        }
+        next();
+
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.messgae})
+    }
+
+}
+
+
+export default userauth
