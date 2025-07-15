@@ -60,7 +60,7 @@ const Login = () => {
         getUserData()
         localStorage.setItem('token', response.data.token)
         toast.success("Login successful")
-        window.location.reload()
+        navigate('/') // ✅ no reload
       } else {
         toast.error(response.data.message)
       }
@@ -72,8 +72,8 @@ const Login = () => {
   }
 
   useEffect(() => {
-    if (token) {
-      navigate('/')
+    if (token && token.trim() !== '') {
+      navigate('/') // ✅ prevent redirect loop
     }
   }, [token])
 
