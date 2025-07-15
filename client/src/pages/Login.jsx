@@ -7,7 +7,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import axios from 'axios'
 
 const Login = () => {
-  const { backendUrl, token, setToken, setIsLoggedin, getUserData } = useContext(ShopContext)
+  const { backendUrl, token, setToken, setIsLoggedin, getUserData, userData } = useContext(ShopContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [captchaValue, setCaptchaValue] = useState(null)
@@ -71,11 +71,12 @@ const Login = () => {
     }
   }
 
-  useEffect(() => {
-    if (token && token.trim() !== '') {
-      navigate('/') // ✅ prevent redirect loop
-    }
-  }, [token])
+ useEffect(() => {
+  if (token && token.trim() !== '' && userData) {
+    navigate('/')
+  }
+}, [token, userData])
+
 
   return (
     <div>
