@@ -7,13 +7,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 
 const Login = () => {
-  const {
-    backendUrl,
-    setToken,
-    setIsLoggedin,
-    getUserData
-  } = useContext(ShopContext);
-
+  const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [captchaValue, setCaptchaValue] = useState(null);
@@ -25,8 +19,8 @@ const Login = () => {
     if (loading) return;
     setLoading(true);
 
-    if (!email || !password) {
-      toast.error('Please fill all fields');
+    if (!email.trim() || !password.trim()) {
+      toast.error("Please fill in all fields");
       setLoading(false);
       return;
     }
@@ -37,34 +31,37 @@ const Login = () => {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Invalid email address");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const res = await axios.post(`${backendUrl}/api/auth/login`, {
+      const response = await axios.post(backendUrl + '/api/auth/login', {
         email,
         password,
         captcha: captchaValue
       });
 
-      if (res.data.success) {
-        const token = res.data.token;
-        localStorage.setItem('token', token);
-        axios.defaults.headers.common['token'] = token;
+      if (response.data.success) {
+        const authToken = response.data.token;
+        localStorage.setItem('token', authToken);
+        axios.defaults.headers.common['token'] = authToken;
+        setToken(authToken);
 
-        // ✅ Wait for user data before navigating
-        await getUserData(token);
-        setToken(token);
+        await getUserData(authToken);
         setIsLoggedin(true);
-        toast.success("Login successful");
 
-        // ✅ Delay navigate to ensure context is synced
-        setTimeout(() => {
-          navigate('/');
-        }, 200);
+        toast.success("Login successful");
+        navigate('/');
       } else {
-        toast.error(res.data.message || 'Login failed');
+        toast.error(response.data.message || "Login failed.");
         setIsLoggedin(false);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || "Login request failed.");
       setIsLoggedin(false);
     } finally {
       setLoading(false);
@@ -75,8 +72,10 @@ const Login = () => {
     <div>
       <section className="relative flex flex-wrap lg:items-center mt-16">
         {/* Left Side */}
-        <div className="relative lg:h-[600px] h-96 w-full lg:w-1/2 bg-image text-white rounded-3xl"
-          style={{ backgroundImage: `url(${assets.h5})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div
+          className="relative lg:h-[600px] h-96 w-full lg:w-1/2 bg-image text-white rounded-3xl"
+          style={{ backgroundImage: `url(${assets.h5})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
           <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-5xl mb-4 lg:mt-60 mt-36 prata-regular">TECHSNACC</h1>
             <h1 className="text-2xl font-bold sm:text-3xl">Welcome to Saiki Accessories Portal</h1>
@@ -90,30 +89,50 @@ const Login = () => {
           </div>
 
           <form onSubmit={onSubmitHandler} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
-            <div>
-              <label className="input input-bordered flex items-center gap-2 rounded-full">
-                <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" placeholder="Email" className="grow" />
-              </label>
-            </div>
+            <label className="input input-bordered flex items-center gap-2 rounded-full">
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                type="email"
+                placeholder="Email"
+                autoComplete="email"
+                className="grow"
+              />
+            </label>
 
-            <div>
-              <label className="input input-bordered flex items-center gap-2 rounded-full">
-                <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder="Password" className="grow" />
-              </label>
-            </div>
+            <label className="input input-bordered flex items-center gap-2 rounded-full">
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                type="password"
+                placeholder="Password"
+                autoComplete="current-password"
+                className="grow"
+              />
+            </label>
 
-            <ReCAPTCHA sitekey="6LcDBe8qAAAAAHiq8sQObi-6Qd2Gkq58H1GhODKO" onChange={setCaptchaValue} />
+            <ReCAPTCHA
+              sitekey="6LcDBe8qAAAAAHiq8sQObi-6Qd2Gkq58H1GhODKO"
+              onChange={(value) => setCaptchaValue(value)}
+            />
 
             <div className="flex items-center justify-between text-sm text-gray-500">
-              <span onClick={() => navigate('/reset-password')} className="cursor-pointer hover:text-blue-600">Forgot password?</span>
-              <span>Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link></span>
+              <span onClick={() => navigate('/reset-password')} className="cursor-pointer hover:text-blue-600">
+                Forgot password?
+              </span>
+              <span>
+                Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link>
+              </span>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${loading ? "bg-gray-400" : "bg-green-800 hover:bg-green-900"}`}>
-              {loading ? "Signing in..." : "Sign in"}
+              className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${
+                loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'
+              }`}
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
         </div>
