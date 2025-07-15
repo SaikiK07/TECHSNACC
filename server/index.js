@@ -6,7 +6,7 @@ import "dotenv/config"
 import authRouter from './routes/authRoutes.js'
 import productRouter from "./routes/productRoute.js"
 import contactRouter from "./routes/contactRoute.js"
-import connectCloudinary from "./config/cloudinary.js"
+import './config/cloudinary.js';
 import categoryRouter from "./routes/categoryRoute.js"
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
@@ -29,7 +29,7 @@ try {
     console.log("Error:",error)
 }
 
-connectCloudinary()
+//connectCloudinary()
 
 const allowedOrigins =['http://localhost:5173','http://localhost:5174']
 app.use(express.json())

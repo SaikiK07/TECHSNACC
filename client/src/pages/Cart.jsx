@@ -10,6 +10,7 @@ const Cart = () => {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext)
 
   const [cartData, setCartData] = useState([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (products.length > 0) {
@@ -28,6 +29,12 @@ const Cart = () => {
       setCartData(tempData)
     }
   }, [cartItems, products])
+
+  const handleCheckout = () => {
+    if (loading) return
+    setLoading(true)
+    navigate('/place-order')
+  }
 
   return (
     <div className='border-t pt-14'>
@@ -91,10 +98,11 @@ const Cart = () => {
           <CartTotal />
           <div className='w-full text-end'>
             <button
-              onClick={() => navigate('/place-order')}
-              className='bg-black text-white text-sm my-8 px-8 py-3'
+              onClick={handleCheckout}
+              disabled={loading}
+              className={`text-sm my-8 px-8 py-3 text-white transition rounded ${loading ? 'bg-gray-700 cursor-not-allowed' : 'bg-black'}`}
             >
-              PROCEED TO CHECKOUT
+              {loading ? 'Redirecting...' : 'PROCEED TO CHECKOUT'}
             </button>
           </div>
         </div>

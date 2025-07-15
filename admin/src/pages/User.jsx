@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
-import { FaTrashAlt } from "react-icons/fa"; // Importing React Icons
+import { FaTrashAlt } from "react-icons/fa";
 
 const User = ({ token }) => {
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch users
   const fetchList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/auth/listuser`);
@@ -19,10 +19,11 @@ const User = ({ token }) => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to fetch users");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Delete user
   const removeUser = async (id) => {
     try {
       const response = await axios.post(
@@ -50,10 +51,11 @@ const User = ({ token }) => {
     <div className="p-8 bg-gradient-to-r bg-gray-100 min-h-screen flex flex-col items-center">
       <h2 className="text-3xl font-bold text-gray-700 mb-8">User Management</h2>
 
-      {/* User List */}
       <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-6">
         <h3 className="text-2xl font-semibold text-gray-700 mb-6">Users</h3>
-        {list.length > 0 ? (
+        {loading ? (
+          <p className="text-center text-gray-500">Loading users...</p>
+        ) : list.length > 0 ? (
           <ul className="space-y-4">
             {list.map((user) => (
               <li
@@ -76,7 +78,7 @@ const User = ({ token }) => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No users available.</p>
+          <p className="text-center text-gray-500">No users available.</p>
         )}
       </div>
     </div>

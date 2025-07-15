@@ -6,12 +6,7 @@ import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 
 const Update = ({ token }) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
-
-  const { id } = useParams(); // Get product ID from URL
+  const { id } = useParams();
   const [product, setProduct] = useState({});
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -19,10 +14,11 @@ const Update = ({ token }) => {
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const [brand, setBrand] = useState('');
-  const [brands, setBrands] = useState([]); // Add state for brands
+  const [brands, setBrands] = useState([]);
   const [bestseller, setBestseller] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState([null, null, null, null]);
 
-  // Fetch product data for updating
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -38,148 +34,137 @@ const Update = ({ token }) => {
           setBestseller(data.bestseller);
         }
       } catch (error) {
-        console.log(error);
+        toast.error('Failed to fetch product');
       }
     };
-
     fetchProduct();
   }, [id]);
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/category/list`);
-        if (response.data.success) {
-          setCategories(response.data.categories);
-        }
+        const res = await axios.get(`${backendUrl}/api/category/list`);
+        if (res.data.success) setCategories(res.data.categories);
       } catch (error) {
-        console.log(error);
+        toast.error('Failed to load categories');
       }
     };
-
     fetchCategories();
   }, []);
 
-  // Fetch brands
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/brand/list`); // Fetch brands from backend
-        if (response.data.success) {
-          setBrands(response.data.brands);
-        }
+        const res = await axios.get(`${backendUrl}/api/brand/list`);
+        if (res.data.success) setBrands(res.data.brands);
       } catch (error) {
-        console.log(error);
+        toast.error('Failed to load brands');
       }
     };
-
     fetchBrands();
   }, []);
 
-  // Handle update submission
+  const handleImageChange = (file, index) => {
+    const updated = [...images];
+    updated[index] = file;
+    setImages(updated);
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('id', id);
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('price', price);
-    formData.append('category', category);
-    formData.append('brand', brand);
-    formData.append('bestseller', bestseller);
-
-    // Append images only if they are updated
-    if (image1) formData.append('image1', image1);
-    if (image2) formData.append('image2', image2);
-    if (image3) formData.append('image3', image3);
-    if (image4) formData.append('image4', image4);
-
+    if (loading) return;
+    setLoading(true);
     try {
-        const response = await axios.post(
-            `${backendUrl}/api/product/update`,
-            formData,
-            { headers: { 'Content-Type': 'multipart/form-data', token } }
-        );
+      const formData = new FormData();
+      formData.append('id', id);
+      formData.append('name', name);
+      formData.append('description', description);
+      formData.append('price', price);
+      formData.append('category', category);
+      formData.append('brand', brand);
+      formData.append('bestseller', bestseller);
 
-        if (response.data.success) {
-            toast.success('Product Updated Successfully');
-        } else {
-            toast.error(response.data.message);
-        }
+      images.forEach((file, i) => {
+        if (file) formData.append(`image${i + 1}`, file);
+      });
+
+      const response = await axios.post(
+        `${backendUrl}/api/product/update`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data', token } }
+      );
+
+      if (response.data.success) {
+        toast.success('Product Updated Successfully');
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
-        console.log(error);
-        toast.error('Update Failed');
+      toast.error('Update Failed');
+    } finally {
+      setLoading(false);
     }
-};
+  };
 
   return (
-    <form onSubmit={handleUpdate} className="flex flex-col w-full items-start gap-3">
-      <div>
-        <p className="mb-2">Upload Image</p>
-        <div className="flex gap-2">
-          {[setImage1, setImage2, setImage3, setImage4].map((setImage, index) => (
-            <label key={index} htmlFor={`image${index + 1}`}>
-              <img
-                className="w-20"
-                src={
-                  eval(`image${index + 1}`)
-                    ? URL.createObjectURL(eval(`image${index + 1}`))
-                    : product.image?.[index] || assets.upload_area
-                }
-                alt={`Product Image ${index + 1}`}
-              />
-              <input
-                type="file"
-                id={`image${index + 1}`}
-                hidden
-                onChange={(e) => setImage(e.target.files[0])}
-              />
-            </label>
-          ))}
-        </div>
-      </div>
-      <div className="w-full">
-        <p className="mb-2">Product Name</p>
-        <input className="w-full max-w-[500px] px-3 py-2" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+    <form onSubmit={handleUpdate} className="flex flex-col w-full items-start gap-4 p-4">
+      <p className="text-lg font-semibold">Upload Images</p>
+      <div className="flex gap-2">
+        {[0, 1, 2, 3].map((i) => (
+          <label key={i} htmlFor={`image${i}`}>
+            <img
+              src={images[i] ? URL.createObjectURL(images[i]) : product.image?.[i] || assets.upload_area}
+              className="w-20 h-20 object-cover border rounded"
+              alt={`product-${i}`}
+            />
+            <input
+              type="file"
+              id={`image${i}`}
+              hidden
+              onChange={(e) => handleImageChange(e.target.files[0], i)}
+            />
+          </label>
+        ))}
       </div>
 
-      <div className="w-full">
-        <p className="mb-2">Product Description</p>
-        <textarea className="w-full max-w-[500px] px-3 py-2" value={description} onChange={(e) => setDescription(e.target.value)} required />
+      <div className="w-full max-w-lg">
+        <p>Product Name</p>
+        <input className="w-full p-2 border rounded" value={name} onChange={(e) => setName(e.target.value)} required />
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
+      <div className="w-full max-w-lg">
+        <p>Description</p>
+        <textarea className="w-full p-2 border rounded" value={description} onChange={(e) => setDescription(e.target.value)} required />
+      </div>
+
+      <div className="flex flex-wrap gap-4">
         <div>
-          <p className="mb-2">Product Category</p>
-          <select className="w-full px-3 py-2" value={category} onChange={(e) => setCategory(e.target.value)} required>
+          <p>Category</p>
+          <select className="p-2 border rounded" value={category} onChange={(e) => setCategory(e.target.value)} required>
             <option value="">Select Category</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>{cat.name}</option>
             ))}
           </select>
         </div>
-
         <div>
-          <p className="mb-2">Product Brand</p>
-          <select className='w-full px-3 py-2' value={brand} onChange={(e) => setBrand(e.target.value)} required>
+          <p>Brand</p>
+          <select className="p-2 border rounded" value={brand} onChange={(e) => setBrand(e.target.value)} required>
             <option value="">Select Brand</option>
-            {brands.map((brandItem) => (
-              <option key={brandItem.name} value={brandItem.name}>{brandItem.name}</option>
+            {brands.map((br) => (
+              <option key={br.name} value={br.name}>{br.name}</option>
             ))}
           </select>
         </div>
-
         <div>
-          <p className="mb-2">Product Price</p>
-          <input className="w-full px-3 py-2 sm:w-[120px]" type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
+          <p>Price</p>
+          <input className="p-2 border rounded w-[120px]" type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
         </div>
       </div>
 
-      
-
-      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">Update</button>
+      <button type="submit" disabled={loading} className={`mt-4 px-6 py-3 text-white rounded ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800'}`}>
+        {loading ? 'Updating...' : 'Update'}
+      </button>
     </form>
   );
 };

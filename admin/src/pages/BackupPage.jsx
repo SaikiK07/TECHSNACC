@@ -10,36 +10,45 @@ const BackupPage = () => {
   const handleBackup = async () => {
     setLoading(true);
     setMessage('');
+    setFolderPath('');
     try {
-      const res = await axios.get(backendUrl +'/api/backup/database', {
+      const res = await axios.get(`${backendUrl}/api/backup/database`, {
         withCredentials: true
       });
 
-      setMessage(res.data.message);
-      setFolderPath(res.data.folder);
+      setMessage(res.data.message || 'Backup completed.');
+      setFolderPath(res.data.folder || '');
     } catch (err) {
       console.error(err);
-      setMessage('Backup failed. Please try again.');
+      setMessage('❌ Backup failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto mt-20 bg-white shadow-lg rounded-xl text-center">
-      <h2 className="text-2xl font-semibold mb-4">Backup Database</h2>
+    <div className="p-6 max-w-md mx-auto mt-20 bg-white shadow-xl rounded-xl text-center border border-gray-200">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Backup Database</h2>
+
       <button
         onClick={handleBackup}
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+        className={`w-full py-3 rounded-lg text-white font-semibold transition duration-300 ${
+          loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+        }`}
         disabled={loading}
       >
         {loading ? 'Backing up...' : 'Backup Now'}
       </button>
 
       {message && (
-        <div className="mt-4">
-          <p className="text-green-600 font-medium">{message}</p>
+        <div className="mt-6">
+          <p className={`font-medium ${message.includes('failed') ? 'text-red-600' : 'text-green-600'}`}>
+            {message}
+          </p>
           {folderPath && (
-            <p className="text-sm text-gray-600">Stored at: <code>{folderPath}</code></p>
+            <p className="text-sm text-gray-600 mt-1 break-all">
+              Stored at: <code>{folderPath}</code>
+            </p>
           )}
         </div>
       )}

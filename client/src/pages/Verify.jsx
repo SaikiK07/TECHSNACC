@@ -1,48 +1,59 @@
-import React, { useContext, useEffect } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import { useSearchParams } from 'react-router-dom'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import React, { useContext, useEffect, useState } from 'react';
+import { ShopContext } from '../context/ShopContext';
+import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Verify = () => {
+  const { navigate, token, setCartItems, backendUrl } = useContext(ShopContext);
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
 
-    const {navigate,token,setCartItems,backendUrl} = useContext(ShopContext)
-    const [serachParams,setSearchParams] =useSearchParams()
+  const success = searchParams.get('success');
+  const orderId = searchParams.get('orderId');
 
-    const success = serachParams.get('success')
-    const orderId = serachParams.get('orderId')
+  const verifyPayment = async () => {
+    if (!token || loading) return;
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        backendUrl + '/api/order/verifyStripe',
+        { success, orderId },
+        { headers: { token } }
+      );
 
-    const verifyPayment =async()=>{
-        try {
-            
-            if (!token) {
-                return null                
-            }
-
-            const response = await axios.post(backendUrl + '/api/order/verifyStripe',{success,orderId},{headers:{token}})
-
-            if (response.data.success) {
-                setCartItems({})
-                navigate('/orders')
-            } else {
-                navigate('/cart')
-            }
-
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message)
-        }
+      if (response.data.success) {
+        setCartItems({});
+        navigate('/orders');
+      } else {
+        toast.error(response.data.message || 'Payment verification failed');
+        navigate('/cart');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || 'Something went wrong');
+      navigate('/cart');
     }
+    setLoading(false);
+  };
 
-    useEffect(()=>{
-        verifyPayment()
-    },[token])
+  useEffect(() => {
+    verifyPayment();
+  }, [token]);
 
   return (
-    <div>
-        
+    <div className="min-h-screen flex items-center justify-center bg-white text-center px-4">
+      {loading ? (
+        <div className="text-xl text-blue-600 font-semibold animate-pulse">
+          Verifying your payment...
+        </div>
+      ) : (
+        <div className="text-xl text-gray-600 font-medium">
+          Redirecting...
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Verify
+export default Verify;

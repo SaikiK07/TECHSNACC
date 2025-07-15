@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from '../config/cloudinary.js';
 import productModel from '../modles/productModel.js'
 import categoryModel from '../modles/categoryModel.js'
 import mongoose from "mongoose";

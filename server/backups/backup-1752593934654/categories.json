@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "68766b2b89a6e17e44e15f50",
+    "name": "abc",
+    "attributes": [
+      "ag",
+      "gd",
+      "rt"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "687672e29ebe4043bfc20aa5",
+    "name": "b",
+    "attributes": [
+      "b",
+      "b",
+      "b"
+    ],
+    "__v": 0
+  }
+]

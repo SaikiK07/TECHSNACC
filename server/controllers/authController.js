@@ -7,7 +7,7 @@ import { EMAIL_VERIFY_TEMPLATE,PASSWORD_RESET_TEMPLATE } from '../config/emailTe
 
 
 const createToken =(id) =>{
-    return jwt.sign({id},process.env.JWT_SECERT,{expiresIn:'7d'})
+    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'3d'})
 }
 
 //register
@@ -269,7 +269,7 @@ export const adminLogin =async (req,res) => {
         const {email,password} =req.body
 
         if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
-            const token = jwt.sign(email+password,process.env.JWT_SECERT)
+            const token = jwt.sign(email+password,process.env.JWT_SECRET)
             res.json({success:true,token})
         } else {
             res.json({success:false,message:"Invalid credentials"})

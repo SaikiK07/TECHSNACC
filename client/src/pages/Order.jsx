@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
 import axios from 'axios';
@@ -11,11 +11,15 @@ const Order = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   // Fetch orders from backend
-  const loadOrderData = async () => {
+  const loadOrderData = useCallback(async () => {
     if (!token) return;
 
     try {
-      const response = await axios.post(`${backendUrl}/api/order/userorders`, {}, { headers: { token } });
+      const response = await axios.post(
+        `${backendUrl}/api/order/userorders`,
+        {},
+        { headers: { token } }
+      );
 
       if (response.data.success) {
         const allOrdersItem = response.data.orders.flatMap(order =>
@@ -34,11 +38,11 @@ const Order = () => {
       console.error(error);
       toast.error('Failed to load orders.');
     }
-  };
+  }, [backendUrl, token]);
 
   useEffect(() => {
     loadOrderData();
-  }, [token]);
+  }, [loadOrderData]);
 
   const handleBillClick = (order) => {
     setSelectedOrder(order);
@@ -51,10 +55,13 @@ const Order = () => {
     if (!selectedOrder) return;
 
     try {
-      const res = await axios.get(`${backendUrl}/api/order/invoice/${selectedOrder.orderId}`, {
-        headers: { token },
-        responseType: 'blob',
-      });
+      const res = await axios.get(
+        `${backendUrl}/api/order/invoice/${selectedOrder.orderId}`,
+        {
+          headers: { token },
+          responseType: 'blob',
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement('a');
@@ -62,8 +69,11 @@ const Order = () => {
       link.setAttribute('download', `invoice_${selectedOrder.orderId}.pdf`);
       document.body.appendChild(link);
       link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
+      toast.error('Failed to download invoice.');
     }
   };
 
@@ -95,31 +105,48 @@ const Order = () => {
         <div>
           {orderData.map((item, index) => (
             <div
-              key={index}
+              key={`${item.orderId}-${index}`}
               className="py-4 border-t border-b text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-4"
             >
               {/* Product Image & Details */}
               <div className="flex items-start gap-6 text-sm">
-                <img src={item.image[0]} className="w-16 sm:w-20 rounded-md object-cover" alt={item.name} />
+                <img
+                  src={item.image[0]}
+                  className="w-16 sm:w-20 rounded-md object-cover"
+                  alt={item.name}
+                />
                 <div>
                   <p className="sm:text-base font-medium">{item.name}</p>
                   <div className="flex items-center gap-3 mt-1 text-base text-gray-700">
-                    <p>{currency}{item.price}</p>
+                    <p>
+                      {currency}
+                      {item.price}
+                    </p>
                     <p>Qty: {item.quantity}</p>
                     <p>Option: {item.attributes}</p>
                   </div>
-                  <p className="mt-1 text-sm text-gray-500">Date: {new Date(item.date).toDateString()}</p>
-                  <p className="mt-1 text-sm text-gray-500">Payment: {item.paymentMethod}</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Date: {new Date(item.date).toDateString()}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Payment: {item.paymentMethod}
+                  </p>
                 </div>
               </div>
 
               {/* Status & Actions */}
               <div className="md:w-1/2 flex justify-between items-center">
                 {renderStatusIndicator(item.status)}
-                <button onClick={loadOrderData} className="border px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100">
+                <button
+                  onClick={loadOrderData}
+                  className="border px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 cursor-pointer"
+                >
                   Track Order
                 </button>
-                <button onClick={() => handleBillClick(item)} className="border px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100">
+                <button
+                  onClick={() => handleBillClick(item)}
+                  className="border px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 cursor-pointer"
+                >
                   View Bill
                 </button>
               </div>
@@ -135,18 +162,29 @@ const Order = () => {
             <h2 className="text-lg font-semibold border-b pb-2">
               Invoice for <span className="text-indigo-600">{selectedOrder.name}</span>
             </h2>
-            <p>Order ID: <span className="text-gray-600">{selectedOrder.orderId}</span></p>
+            <p>
+              Order ID: <span className="text-gray-600">{selectedOrder.orderId}</span>
+            </p>
             <p>Order Date: {new Date(selectedOrder.date).toDateString()}</p>
             <p>Payment Method: {selectedOrder.paymentMethod}</p>
             <p>Quantity: {selectedOrder.quantity}</p>
-            <p>Price: {currency}{selectedOrder.price}</p>
+            <p>
+              Price: {currency}
+              {selectedOrder.price}
+            </p>
 
             {/* Modal Actions */}
             <div className="flex justify-end gap-4 pt-4 border-t">
-              <button onClick={handleBillClose} className="px-4 py-2 border rounded-md text-sm hover:bg-gray-100">
+              <button
+                onClick={handleBillClose}
+                className="px-4 py-2 border rounded-md text-sm hover:bg-gray-100 cursor-pointer"
+              >
                 Close
               </button>
-              <button onClick={downloadInvoice} className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700">
+              <button
+                onClick={downloadInvoice}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 cursor-pointer"
+              >
                 Download Invoice
               </button>
             </div>

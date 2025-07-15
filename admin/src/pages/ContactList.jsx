@@ -7,10 +7,11 @@ import { FaTrashAlt } from 'react-icons/fa';
 const ContactList = ({ token }) => {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get(backendUrl + '/api/contact/list');
+      const response = await axios.get(`${backendUrl}/api/contact/list`);
       if (response.data.success) {
         setContacts(response.data.contacts);
       } else {
@@ -18,23 +19,31 @@ const ContactList = ({ token }) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error("Failed to fetch contacts");
     }
   };
 
   const deleteContact = async (id) => {
+    if (loading) return;
+    setLoading(true);
     try {
-      const response = await axios.post(backendUrl + '/api/contact/delete', { id }, { headers: { token } });
+      const response = await axios.post(
+        `${backendUrl}/api/contact/delete`,
+        { id },
+        { headers: { token } }
+      );
       if (response.data.success) {
-        toast.success('Message deleted successfully');
-        setContacts(contacts.filter(contact => contact._id !== id));
+        toast.success("Message deleted successfully");
+        setContacts((prev) => prev.filter((c) => c._id !== id));
         setSelectedContact(null);
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error("Failed to delete contact");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,10 +52,10 @@ const ContactList = ({ token }) => {
   }, []);
 
   return (
-    <div className='p-8 bg-gradient-to-r bg-gray-100 min-h-screen flex flex-col items-center'>
+    <div className='p-8 bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen flex flex-col items-center'>
       <h2 className='text-3xl font-bold text-gray-700 mb-8'>Contact Messages</h2>
       <div className='w-full max-w-5xl flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden'>
-        {/* Contact List */}
+        {/* Sidebar: Contact List */}
         <div className='w-full md:w-1/3 border-r bg-gray-50 p-4'>
           <h3 className='text-lg font-semibold mb-4 text-gray-600'>User Messages</h3>
           {contacts.length > 0 ? (
@@ -54,7 +63,11 @@ const ContactList = ({ token }) => {
               {contacts.map((contact) => (
                 <li
                   key={contact._id}
-                  className={`p-3 rounded-lg cursor-pointer transition duration-300 ${selectedContact?._id === contact._id ? 'bg-blue-500 text-white' : 'bg-white hover:bg-blue-100'}`}
+                  className={`p-3 rounded-lg cursor-pointer transition duration-300 ${
+                    selectedContact?._id === contact._id
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white hover:bg-blue-100'
+                  }`}
                   onClick={() => setSelectedContact(contact)}
                 >
                   {contact.username}
@@ -66,7 +79,7 @@ const ContactList = ({ token }) => {
           )}
         </div>
 
-        {/* Contact Details */}
+        {/* Message Details Panel */}
         <div className='w-full md:w-2/3 p-6'>
           {selectedContact ? (
             <div className='space-y-4'>
@@ -77,11 +90,13 @@ const ContactList = ({ token }) => {
                 <p className='text-gray-700'><b>Subject:</b> {selectedContact.subject}</p>
                 <p className='text-gray-700'><b>Message:</b> {selectedContact.message}</p>
               </div>
-              <button 
+              <button
                 onClick={() => deleteContact(selectedContact._id)}
-                className='flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-red-400 transition duration-300'
+                disabled={loading}
+                className='flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-red-500 transition disabled:opacity-50'
               >
-                <FaTrashAlt /> Delete Message
+                <FaTrashAlt />
+                {loading ? "Deleting..." : "Delete Message"}
               </button>
             </div>
           ) : (

@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "68766f3b226fced4b69b9662",
+    "name": "saiki",
+    "username": "saiki_K",
+    "email": "axatparmar7@gmail.com",
+    "password": "$2b$10$BJynKm4SQDL6t/m9bzf/C.sXfpS9EUt.30Y99hoGXqxcdd6uIE0BO",
+    "verifyOtp": "",
+    "verifyOtpExpireAt": 0,
+    "isAccountVerified": false,
+    "resetOtp": "",
+    "resetOtpExpireAt": 0,
+    "cartData": {},
+    "__v": 0
+  }
+]

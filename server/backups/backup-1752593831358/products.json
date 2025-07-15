@@ -1,0 +1,34 @@
+[
+  {
+    "_id": "68766edb226fced4b69b9657",
+    "name": "a",
+    "description": "a",
+    "price": 32,
+    "image": [
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1752592091/lysd3cbt142sc2sxbuif.avif"
+    ],
+    "bestseller": false,
+    "category": "68766b2b89a6e17e44e15f50",
+    "brand": "abc",
+    "date": 1752593471218,
+    "averageRating": 0,
+    "totalRatings": 0,
+    "__v": 0
+  },
+  {
+    "_id": "6876714b9ebe4043bfc20a94",
+    "name": "fs",
+    "description": "wq",
+    "price": 4,
+    "image": [
+      "https://res.cloudinary.com/dpybvcvbn/image/upload/v1752592714/iijwzhvpi3oizl42wkat.jpg"
+    ],
+    "bestseller": false,
+    "category": "68766b2b89a6e17e44e15f50",
+    "brand": "abc",
+    "date": 1752592715678,
+    "averageRating": 0,
+    "totalRatings": 0,
+    "__v": 0
+  }
+]
