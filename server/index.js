@@ -24,8 +24,6 @@ const URI = process.env.MongoDBURI;
 
 // ✅ Connect to MongoDB with error handling and better config
 mongoose.connect(URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   ssl: true,
   tlsAllowInvalidCertificates: false,
 }).then(() => {
