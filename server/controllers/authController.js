@@ -325,7 +325,17 @@ export const googleLogin = async (req, res) => {
     let user = await userModel.findOne({ email });
 
     if (!user) {
-      user = new userModel({ name, email, isAccountVerified: true });
+      const generatedUsername = email.split('@')[0] + Math.floor(Math.random() * 10000);
+      const dummyPassword = await bcrypt.hash(email + process.env.JWT_SECRET, 10);
+
+      user = new userModel({
+        name,
+        email,
+        username: generatedUsername,
+        password: dummyPassword,
+        isAccountVerified: true
+      });
+
       await user.save();
     }
 
