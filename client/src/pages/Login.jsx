@@ -131,7 +131,7 @@ const Login = () => {
             </label>
 
             <ReCAPTCHA
-             sitekey="6LcdcoUrAAAAAMTzVt-XRdEjvkHJejcPeOfLhywR"
+             sitekey="6LeqdYUrAAAAAJnldJrzjkAR__EXQv9odCTG6OV8"
               onChange={(value) => setCaptchaValue(value)}
             />
 
