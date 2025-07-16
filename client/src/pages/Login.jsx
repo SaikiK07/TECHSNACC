@@ -1,12 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { assets } from '../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -16,27 +15,47 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const googleButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (window.google && googleButtonRef.current) {
+      window.google.accounts.id.initialize({
+        client_id: '556974166740-ml0ibptmk1ttttmfpjc244ppiqsd2c9b.apps.googleusercontent.com',
+        callback: handleGoogleResponse,
+      });
+
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        theme: 'outline',
+        size: 'large',
+        shape: 'pill',
+        width: '300',
+      });
+
+      window.google.accounts.id.prompt(); // optional, shows one-tap
+    }
+  }, []);
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     if (loading) return;
     setLoading(true);
 
     if (!email.trim() || !password.trim()) {
-      toast.error("Please fill in all fields");
+      toast.error('Please fill in all fields');
       setLoading(false);
       return;
     }
 
     if (!captchaValue) {
-      toast.error("Please complete the reCAPTCHA.");
+      toast.error('Please complete the reCAPTCHA.');
       setLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post(backendUrl + '/api/auth/login', {
+      const response = await axios.post(`${backendUrl}/api/auth/login`, {
         email,
-        password
+        password,
       });
 
       if (response.data.success) {
@@ -46,28 +65,28 @@ const Login = () => {
         setToken(authToken);
         await getUserData(authToken);
         setIsLoggedin(true);
-        toast.success("Login successful");
+        toast.success('Login successful');
         navigate('/');
       } else {
-        toast.error(response.data.message || "Login failed.");
+        toast.error(response.data.message || 'Login failed.');
         setIsLoggedin(false);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login request failed.");
+      toast.error(error.response?.data?.message || 'Login request failed.');
       setIsLoggedin(false);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleResponse = async (response) => {
     try {
-      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
+      const decoded = jwtDecode(response.credential);
       const { email, name } = decoded;
 
-      const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
+      const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, {
         email,
-        name
+        name,
       });
 
       if (res.data.success) {
@@ -77,13 +96,13 @@ const Login = () => {
         setToken(token);
         await getUserData(token);
         setIsLoggedin(true);
-        toast.success("Google Login successful");
+        toast.success('Google Login successful');
         navigate('/');
       } else {
-        toast.error(res.data.message || "Google login failed.");
+        toast.error(res.data.message || 'Google login failed.');
       }
     } catch (err) {
-      toast.error("Google login failed.");
+      toast.error('Google login failed.');
     }
   };
 
@@ -93,7 +112,11 @@ const Login = () => {
         {/* Left */}
         <div
           className="relative lg:h-[600px] h-96 w-full lg:w-1/2 bg-image text-white rounded-3xl"
-          style={{ backgroundImage: `url(${assets.h5})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+          style={{
+            backgroundImage: `url(${assets.h5})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
           <div className="mx-auto max-w-lg text-center">
             <h1 className="text-2xl font-bold sm:text-5xl mb-4 lg:mt-60 mt-36 prata-regular">TECHSNACC</h1>
@@ -104,7 +127,9 @@ const Login = () => {
         {/* Right */}
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
-            <h1 className="text-3xl font-bold sm:text-4xl mb-4 lg:mt-24 mt-14 text-green-800 hover:text-green-900">LOGIN</h1>
+            <h1 className="text-3xl font-bold sm:text-4xl mb-4 lg:mt-24 mt-14 text-green-800 hover:text-green-900">
+              LOGIN
+            </h1>
           </div>
 
           <form onSubmit={onSubmitHandler} className="mx-auto mb-0 mt-8 max-w-md space-y-4">
@@ -131,7 +156,7 @@ const Login = () => {
             </label>
 
             <ReCAPTCHA
-             sitekey="6LeqdYUrAAAAAJnldJrzjkAR__EXQv9odCTG6OV8"
+              sitekey="6LeqdYUrAAAAAJnldJrzjkAR__EXQv9odCTG6OV8"
               onChange={(value) => setCaptchaValue(value)}
             />
 
@@ -140,31 +165,28 @@ const Login = () => {
                 Forgot password?
               </span>
               <span>
-                Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link>
+                Don&apos;t have an account?{' '}
+                <Link to="/signup" className="text-blue-600 hover:underline">
+                  Sign up
+                </Link>
               </span>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'}`}
+              className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${
+                loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'
+              }`}
             >
-              {loading ? 'loging in...' : 'LOGIN'}
+              {loading ? 'Logging in...' : 'LOGIN'}
             </button>
 
-            {/* Google Login */}
-            <div className="glogin-wrapper not-prose isolate z-10">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => toast.error("Google login failed")}
-                useOneTap
-                theme="outline"
-                size="large"
-                shape="pill"
-                width="100%"
-              />
+            {/* Google Login Button */}
+            <div className="text-center mt-6">
+              <p className="mb-2 text-gray-500">Or login with Google</p>
+              <div ref={googleButtonRef} className="flex justify-center" />
             </div>
-
           </form>
         </div>
       </section>
