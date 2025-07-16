@@ -12,6 +12,10 @@ const CategoryList = ({ token }) => {
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/category/list`);
@@ -26,12 +30,11 @@ const CategoryList = ({ token }) => {
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const parseAttributes = (inputString) => {
-    return inputString.split(",").map(attr => ({ name: attr.trim() }));
+  const parseAttributes = (input) => {
+    if (typeof input === "string") {
+      return input.split(",").map(attr => ({ name: attr.trim() }));
+    }
+    return input;
   };
 
   const addCategory = async () => {
@@ -49,7 +52,7 @@ const CategoryList = ({ token }) => {
         `${backendUrl}/api/category/add`,
         {
           name: newCategory.name,
-          attributes: parsedAttributes
+          attributes: parsedAttributes,
         },
         { headers: { token } }
       );
@@ -86,7 +89,7 @@ const CategoryList = ({ token }) => {
         {
           id: editingCategory._id,
           name: editingCategory.name,
-          attributes: parsedAttributes
+          attributes: parsedAttributes,
         },
         { headers: { token } }
       );
@@ -140,7 +143,9 @@ const CategoryList = ({ token }) => {
     setIsAddingCategory(false);
     setEditingCategory({
       ...category,
-      attributes: category.attributes.map(attr => attr.name).join(", ")
+      attributes: Array.isArray(category.attributes)
+        ? category.attributes.map(attr => attr.name).join(", ")
+        : "",
     });
     setIsModalOpen(true);
   };
