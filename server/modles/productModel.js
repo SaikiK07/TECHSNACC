@@ -6,7 +6,11 @@ const productSchema = mongoose.Schema({
     price: { type: Number, required: true },
     image: { type: Array, required: true },
     bestseller: { type: Boolean },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: "category", required: true },
+    category: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Category", // 🔧 FIXED this line (was "category")
+        required: true 
+    },
     attributes: { type: Object },
     brand: { type: String, required: true },
     date: { type: Number, required: true },
