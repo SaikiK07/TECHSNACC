@@ -3,6 +3,14 @@ import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
+//models
+import './modles/categoryModel.js';
+import './modles/brandModel.js';
+import './modles/productModel.js';
+import './modles/contactModel.js';
+import './modles/orderModel.js';
+import './modles/reviewModel.js';
+import './modles/userModel.js';
 
 // Routes
 import authRouter from './routes/authRoutes.js';
