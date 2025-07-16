@@ -91,7 +91,7 @@ const removeProduct = async (req, res) => {
 };
 
 // Get a single product
-export const singleProduct = async (req, res) => {
+const singleProduct = async (req, res) => {
   try {
     const { productId } = req.body;
     const product = await productModel
