@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import jwt_decode from 'jwt-decode'; // Use default not `* as jwtDecode`
+import { jwtDecode } from 'jwt-decode';
 import { useGoogleLogin } from '@react-oauth/google';
 import { FcGoogle } from 'react-icons/fc';
 
@@ -20,7 +20,7 @@ const Login = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const userInfo = jwt_decode(tokenResponse.credential);
+        const userInfo = jwtDecode(tokenResponse.credential);
         const { email, name } = userInfo;
 
         const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, { email, name });
