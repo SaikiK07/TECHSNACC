@@ -8,7 +8,6 @@ import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 import * as jwtDecode from 'jwt-decode';
 
-
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
   const [email, setEmail] = useState('');
@@ -91,7 +90,7 @@ const Login = () => {
   return (
     <div>
       <section className="relative flex flex-wrap lg:items-center mt-16">
-        {/* Left Side */}
+        {/* Left */}
         <div
           className="relative lg:h-[600px] h-96 w-full lg:w-1/2 bg-image text-white rounded-3xl"
           style={{ backgroundImage: `url(${assets.h5})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
@@ -102,7 +101,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right Side */}
+        {/* Right */}
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
             <h1 className="text-3xl font-bold sm:text-4xl mb-4 lg:mt-24 mt-14 text-green-800 hover:text-green-900">LOGIN</h1>
@@ -150,12 +149,12 @@ const Login = () => {
               disabled={loading}
               className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'}`}
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? 'loging in...' : 'LOGIN'}
             </button>
 
             {/* Google Login */}
             <div className="text-center mt-4">
-              <p className="mb-2 text-gray-500">Or sign in with Google</p>
+              <p className="mb-2 text-gray-500">Or login in with Google</p>
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => toast.error("Google login failed")}

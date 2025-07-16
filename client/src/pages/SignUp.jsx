@@ -26,11 +26,9 @@ const SignUp = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
-    axios.defaults.withCredentials = true;
 
     const { name, username, email, password, confirmPassword } = form;
 
-    // Validation
     if (!name || !username || !email || !password || !confirmPassword) {
       toast.error("Please fill all fields");
       setLoading(false);
@@ -62,7 +60,6 @@ const SignUp = () => {
       return;
     }
 
-    // API Call
     try {
       const res = await axios.post(`${backendUrl}/api/auth/register`, {
         name,
@@ -124,13 +121,12 @@ const SignUp = () => {
                   <input
                     name={field}
                     type={
-                          field === "password" || field === "confirmPassword"
-                            ? "password"
-                            : field === "email"
-                            ? "email"
-                            : "text"
-                        }
-
+                      field === "password" || field === "confirmPassword"
+                        ? "password"
+                        : field === "email"
+                        ? "email"
+                        : "text"
+                    }
                     placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace("Password", " Password")}
                     className="grow"
                     value={form[field]}
@@ -154,9 +150,7 @@ const SignUp = () => {
 
             <button
               type="submit"
-              className={`inline-block rounded-full bg-green-800 hover:bg-green-900 px-5 py-3 text-sm font-medium text-white w-full ${
-                loading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+              className={`inline-block rounded-full bg-green-800 hover:bg-green-900 px-5 py-3 text-sm font-medium text-white w-full ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
               disabled={loading}
             >
               {loading ? "Signing up..." : "Sign up"}
