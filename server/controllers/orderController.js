@@ -357,43 +357,39 @@ const createInvoiceDirectory = () => {
 const getProductsOrderedCount = async (req, res) => {
     try {
         const productOrderCount = await orderModel.aggregate([
-            { $unwind: "$items" }, // Unwind the items array
+            { $unwind: "$items" },
             {
                 $group: {
-                    _id: "$items._id", // Group by product ID
-                    totalQuantity: { $sum: "$items.quantity" }, // Sum the quantities of each product
+                    _id: "$items._id", // Should be items.productId, not _id
+                    totalQuantity: { $sum: "$items.quantity" },
                 }
             },
-            { $sort: { totalQuantity: -1 } }, // Sort by total quantity ordered in descending order
+            { $sort: { totalQuantity: -1 } }
         ]);
 
         if (productOrderCount.length === 0) {
             return res.json({ success: false, message: "No products have been ordered yet." });
         }
 
-        // Fetch all product details
+        // Fix: Use items.productId instead of items._id
         const productIds = productOrderCount.map(item => item._id);
-        const productDetails = await productModel.find({ '_id': { $in: productIds } });
+        const productDetails = await productModel.find({ '_id': { $in: productIds } }).populate("category");
 
         const response = productOrderCount.map(item => {
             const product = productDetails.find(p => p._id.toString() === item._id.toString());
             return {
                 productId: item._id,
-                productName: product.name,
+                productName: product?.name || "Unknown",
                 totalQuantity: item.totalQuantity,
-                productImage: product.image,
-                productPrice: product.price,
-                productCategory: product.category.name,
+                productImage: product?.image || "",
+                productPrice: product?.price || 0,
+                productCategory: product?.category?.name || "Unknown",
             };
         });
 
-        // Top 4 products (based on quantity ordered)
         const topProducts = response.slice(0, 4);
 
-        // Update bestseller field for all products to false first
         await productModel.updateMany({}, { $set: { bestseller: false } });
-
-        // Then, set bestseller to true for top 4 products
         await productModel.updateMany(
             { '_id': { $in: topProducts.map(product => product.productId) } },
             { $set: { bestseller: true } }
