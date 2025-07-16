@@ -153,21 +153,18 @@ const Login = () => {
             </button>
 
             {/* Google Login */}
-            <div className="text-center mt-4">
-              <p className="mb-2 text-gray-500">Or login in with Google</p>
-              <div className="flex justify-center">
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={() => toast.error("Google login failed")}
-                  width="100%"
-                  theme="outline"
-                  size="large"
-                  text="signin_with"
-                  shape="rectangular"
-                />
-              </div>
-
+            <div className="glogin-wrapper not-prose isolate z-10">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => toast.error("Google login failed")}
+                useOneTap
+                theme="outline"
+                size="large"
+                shape="pill"
+                width="100%"
+              />
             </div>
+
           </form>
         </div>
       </section>
