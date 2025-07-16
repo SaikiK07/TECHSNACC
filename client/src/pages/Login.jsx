@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { assets } from '../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import { GoogleLogin } from '@react-oauth/google';
+import * as jwtDecode from 'jwt-decode';
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -14,7 +15,6 @@ const Login = () => {
   const [captchaValue, setCaptchaValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const googleBtnRef = useRef();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -62,7 +62,7 @@ const Login = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const decoded = jwtDecode(credentialResponse.credential);
+      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
       const { email, name } = decoded;
 
       const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
@@ -86,25 +86,6 @@ const Login = () => {
       toast.error("Google login failed.");
     }
   };
-
-  useEffect(() => {
-    if (window.google && googleBtnRef.current) {
-      window.google.accounts.id.initialize({
-        client_id: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
-        callback: handleGoogleSuccess
-      });
-
-      window.google.accounts.id.renderButton(googleBtnRef.current, {
-        theme: 'outline',
-        size: 'large',
-        shape: 'pill',
-        width: 300 // number only, not "100%"
-      });
-
-      // Remove One Tap (optional)
-      // window.google.accounts.id.prompt(); // ❌ not needed if you only want the button
-    }
-  }, []);
 
   return (
     <div>
@@ -172,10 +153,21 @@ const Login = () => {
             </button>
 
             {/* Google Login */}
-            <div className="text-center mt-6">
-              <p className="mb-2 text-gray-500">Or login with Google</p>
-              <div ref={googleBtnRef} className="flex justify-center" />
-            </div>
+        <div className="flex justify-center">
+          <div className="max-w-xs">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => toast.error("Google login failed")}
+              theme="outline"
+              size="large"
+              shape="pill"
+            />
+          </div>
+        </div>
+
+
+
+
           </form>
         </div>
       </section>
