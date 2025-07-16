@@ -30,6 +30,10 @@ const CategoryList = ({ token }) => {
     fetchCategories();
   }, []);
 
+  const parseAttributes = (inputString) => {
+    return inputString.split(",").map(attr => ({ name: attr.trim() }));
+  };
+
   const addCategory = async () => {
     if (!newCategory.name || !newCategory.attributes) {
       toast.error("Please fill all fields");
@@ -39,11 +43,17 @@ const CategoryList = ({ token }) => {
     if (loading) return;
     setLoading(true);
     try {
+      const parsedAttributes = parseAttributes(newCategory.attributes);
+
       const response = await axios.post(
         `${backendUrl}/api/category/add`,
-        newCategory,
+        {
+          name: newCategory.name,
+          attributes: parsedAttributes
+        },
         { headers: { token } }
       );
+
       if (response.data.success) {
         toast.success(response.data.message);
         setNewCategory({ name: "", attributes: "" });
@@ -69,15 +79,18 @@ const CategoryList = ({ token }) => {
     if (loading) return;
     setLoading(true);
     try {
+      const parsedAttributes = parseAttributes(editingCategory.attributes);
+
       const response = await axios.post(
         `${backendUrl}/api/category/update`,
         {
           id: editingCategory._id,
           name: editingCategory.name,
-          attributes: editingCategory.attributes,
+          attributes: parsedAttributes
         },
         { headers: { token } }
       );
+
       if (response.data.success) {
         toast.success(response.data.message);
         setEditingCategory(null);
@@ -125,7 +138,10 @@ const CategoryList = ({ token }) => {
 
   const openEditCategoryModal = (category) => {
     setIsAddingCategory(false);
-    setEditingCategory(category);
+    setEditingCategory({
+      ...category,
+      attributes: category.attributes.map(attr => attr.name).join(", ")
+    });
     setIsModalOpen(true);
   };
 
@@ -153,11 +169,8 @@ const CategoryList = ({ token }) => {
                   <p className="text-sm text-gray-500 mt-1">
                     {Array.isArray(category.attributes)
                       ? category.attributes.map(attr => attr.name || attr).join(", ")
-                      : (typeof category.attributes === "string"
-                          ? category.attributes
-                          : "No attributes")}
+                      : "No attributes"}
                   </p>
-
                 </div>
                 <div className="flex items-center gap-4">
                   <button
