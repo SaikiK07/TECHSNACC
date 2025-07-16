@@ -26,6 +26,10 @@ const CategoryList = ({ token }) => {
     }
   };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   const addCategory = async () => {
     if (!newCategory.name || !newCategory.attributes) {
       toast.error("Please fill all fields");
@@ -144,7 +148,17 @@ const CategoryList = ({ token }) => {
                 key={category._id}
                 className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-md hover:bg-gray-100"
               >
-                <span className="text-gray-700 text-lg">{category.name}</span>
+                <div>
+                  <p className="text-gray-700 text-lg font-semibold">{category.name}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {Array.isArray(category.attributes)
+                      ? category.attributes.map(attr => attr.name || attr).join(", ")
+                      : (typeof category.attributes === "string"
+                          ? category.attributes
+                          : "No attributes")}
+                  </p>
+
+                </div>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => openEditCategoryModal(category)}

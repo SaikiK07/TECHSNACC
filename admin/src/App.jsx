@@ -19,7 +19,7 @@ import CategoryList from './pages/CategoryList';
 import BackupPage from './pages/BackupPage';
 import BrandList from './pages/BrandList';
 
-export const backendUrl = import.meta.env.VITE_BACKEND_URL
+export const backendUrl = import.meta.env.VITE_BACKEND_URI
 export const currency ='₹'
 
 const App = () => {
