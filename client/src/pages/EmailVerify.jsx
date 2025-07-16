@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const EmailVerify = () => {
   const { backendUrl, isLoggedin, userData, getUserData } = useContext(ShopContext);
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
+  const [otpError, setOtpError] = useState(false);
   const inputRefs = useRef([]);
 
   axios.defaults.withCredentials = true;
@@ -26,9 +26,8 @@ const EmailVerify = () => {
   };
 
   const handlePaste = (e) => {
-    const paste = e.clipboardData.getData('text');
-    const pasteArray = paste.split('');
-    pasteArray.forEach((char, index) => {
+    const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    paste.split('').forEach((char, index) => {
       if (inputRefs.current[index]) {
         inputRefs.current[index].value = char;
       }
@@ -40,8 +39,7 @@ const EmailVerify = () => {
     if (loading) return;
 
     setLoading(true);
-    const otpArray = inputRefs.current.map((e) => e.value);
-    const otp = otpArray.join('');
+    const otp = inputRefs.current.map((el) => el.value).join('');
 
     try {
       const { data } = await axios.post(backendUrl + '/api/auth/verify-account', { otp });
@@ -52,10 +50,13 @@ const EmailVerify = () => {
         navigate('/');
       } else {
         toast.error(data.message);
+        setOtpError(true);
       }
     } catch (error) {
       toast.error(error.message || 'Something went wrong');
+      setOtpError(true);
     }
+
     setLoading(false);
   };
 
@@ -66,46 +67,57 @@ const EmailVerify = () => {
   }, [isLoggedin, userData]);
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-purple-400'>
+    <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-purple-400 px-4'>
       <form
         onSubmit={onSubmitHandler}
-        className='bg-slate-900 p-8 rounded-lg shadow-lg w-96 text-sm'
+        className='bg-slate-900/90 backdrop-blur-md p-8 rounded-xl shadow-xl w-full max-w-md text-sm'
       >
-        <h1 className='text-white text-2xl font-semibold text-center mb-4'>
-          Email Verify OTP
-        </h1>
+        <h1 className='text-white text-2xl font-semibold text-center mb-2'>Verify Your Email</h1>
         <p className='text-center mb-6 text-indigo-300'>
-          Enter the 6-digit code sent to your email id.
+          Enter the 6-digit code sent to your registered email address.
         </p>
 
-        <div className='flex justify-between mb-8' onPaste={handlePaste}>
-          {Array(6)
-            .fill(0)
-            .map((_, index) => (
-              <input
-                key={index}
-                type='text'
-                maxLength='1'
-                required
-                ref={(el) => (inputRefs.current[index] = el)}
-                onInput={(e) => handleInput(e, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                className='w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md'
-              />
-            ))}
+        <div className='flex justify-between mb-6' onPaste={handlePaste}>
+          {Array(6).fill(0).map((_, index) => (
+            <input
+              key={index}
+              type='text'
+              inputMode='numeric'
+              maxLength='1'
+              required
+              autoFocus={index === 0}
+              ref={(el) => (inputRefs.current[index] = el)}
+              onInput={(e) => handleInput(e, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              aria-label={`OTP Digit ${index + 1}`}
+              className={`w-11 h-12 sm:w-12 sm:h-12 text-white text-center text-xl rounded-md outline-none border transition-all duration-200 ${
+                otpError ? 'border-red-500' : 'border-gray-600'
+              } bg-[#333A5C] focus:ring-2 focus:ring-indigo-500`}
+            />
+          ))}
         </div>
 
         <button
           type='submit'
           disabled={loading}
-          className={`w-full py-3 text-white rounded-full bg-gradient-to-r ${
+          className={`w-full py-3 text-white font-semibold rounded-full transition-all duration-300 ${
             loading
-              ? 'from-gray-400 to-gray-600 cursor-not-allowed'
-              : 'from-indigo-500 to-indigo-900 hover:opacity-90'
+              ? 'bg-gray-600 cursor-not-allowed'
+              : 'bg-gradient-to-r from-indigo-500 to-indigo-900 hover:opacity-90'
           }`}
         >
           {loading ? 'Verifying...' : 'Verify Email'}
         </button>
+
+        <div className='text-center text-xs text-gray-400 mt-4'>
+          Didn't receive the code?{' '}
+          <span
+            onClick={() => toast.info('OTP resend not implemented')}
+            className='text-indigo-300 hover:underline cursor-pointer'
+          >
+            Resend OTP
+          </span>
+        </div>
       </form>
     </div>
   );

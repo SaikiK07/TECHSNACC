@@ -5,6 +5,9 @@ import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
+import * as jwtDecode from 'jwt-decode';
+
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -31,18 +34,10 @@ const Login = () => {
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Invalid email address");
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await axios.post(backendUrl + '/api/auth/login', {
         email,
-        password,
-        captcha: captchaValue
+        password
       });
 
       if (response.data.success) {
@@ -50,10 +45,8 @@ const Login = () => {
         localStorage.setItem('token', authToken);
         axios.defaults.headers.common['token'] = authToken;
         setToken(authToken);
-
         await getUserData(authToken);
         setIsLoggedin(true);
-
         toast.success("Login successful");
         navigate('/');
       } else {
@@ -65,6 +58,33 @@ const Login = () => {
       setIsLoggedin(false);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
+      const { email, name } = decoded;
+
+      const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
+        email,
+        name
+      });
+
+      if (res.data.success) {
+        const token = res.data.token;
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['token'] = token;
+        setToken(token);
+        await getUserData(token);
+        setIsLoggedin(true);
+        toast.success("Google Login successful");
+        navigate('/');
+      } else {
+        toast.error(res.data.message || "Google login failed.");
+      }
+    } catch (err) {
+      toast.error("Google login failed.");
     }
   };
 
@@ -93,8 +113,8 @@ const Login = () => {
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Email or Username"
                 autoComplete="email"
                 className="grow"
               />
@@ -128,12 +148,19 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${
-                loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'
-              }`}
+              className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'}`}
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
+
+            {/* Google Login */}
+            <div className="text-center mt-4">
+              <p className="mb-2 text-gray-500">Or sign in with Google</p>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => toast.error("Google login failed")}
+              />
+            </div>
           </form>
         </div>
       </section>

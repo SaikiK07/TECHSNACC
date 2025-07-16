@@ -8,11 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
     "dev": "nodemon"
-
   },
   "author": "saiki",
   "license": "ISC",
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "archiver": "^7.0.1",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
@@ -26,6 +26,7 @@
     "fs": "^0.0.1-security",
     "fs-extra": "^11.3.0",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.13.0",
     "multer": "^1.4.5-lts.1",

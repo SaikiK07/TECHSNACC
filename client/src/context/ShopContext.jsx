@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -67,7 +66,8 @@ const ShopContextProvider = (props) => {
     return total;
   };
 
-  const getCartAmount = async () => {
+  // ✅ FIXED: Now it's a synchronous function
+  const getCartAmount = () => {
     let total = 0;
     for (const id in cartItems) {
       const product = products.find(p => p._id === id);

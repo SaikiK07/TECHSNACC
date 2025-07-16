@@ -62,40 +62,40 @@ export const register = async (req ,res) =>{
 }
 
 //login
-export const login =async (req,res)=>{
+// login
+export const login = async (req, res) => {
+  const { email, password } = req.body;
 
-    const {email,password} = req.body
+  try {
+    const user = await userModel.findOne({
+      $or: [{ email }, { username: email }]
+    });
 
-    try {
-
-        const user = await userModel.findOne({email})
-        
-        if(!user){
-            return res.json({success: false, message: 'User doesn`t exist'})
-        }
-
-        const isMatch = await bcrypt.compare(password,user.password)
-
-        if(!isMatch){
-            return res.json({success: false, message: 'Invalid Password'})
-        }
-
-        const token = createToken(user._id)
-        
-        
-        res.cookie('token',token,{
-            httpOnly:true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production',
-            'none': 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-         return res.json({success:true,token})
-        
-    } catch (error) {
-        return res.json({success: false, message: error.message})
+    if (!user) {
+      return res.json({ success: false, message: 'User does not exist' });
     }
-}
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.json({ success: false, message: 'Invalid Password' });
+    }
+
+    const token = createToken(user._id);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.json({ success: true, token });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
 
 //logout
 export const logout = async(req,res) =>{
@@ -316,3 +316,30 @@ export const removeUser = async (req, res) => {
     }
 
 }
+
+
+export const googleLogin = async (req, res) => {
+  const { email, name } = req.body;
+
+  try {
+    let user = await userModel.findOne({ email });
+
+    if (!user) {
+      user = new userModel({ name, email, isAccountVerified: true });
+      await user.save();
+    }
+
+    const token = createToken(user._id);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.json({ success: true, token });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};

@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, register ,adminLogin, listUser, removeUser, logout, sendVerifyOtp, verifyEmail, isAuthenticated, sendResetOtp, resetPassword, verifyResetOtp} from '../controllers/authController.js'
+import { login, register ,adminLogin, listUser, removeUser, logout, sendVerifyOtp, verifyEmail, isAuthenticated, sendResetOtp, resetPassword, verifyResetOtp, googleLogin} from '../controllers/authController.js'
 import adminAuth from '../middlewares/adminAuth.js'
 import userauth from '../middlewares/userauth.js'
 
@@ -17,5 +17,9 @@ authRouter.post('/reset-password',resetPassword)
 authRouter.post('/admin',adminLogin)
 authRouter.get('/listuser',listUser)
 authRouter.post('/userremove',adminAuth,removeUser)
+authRouter.post('/googlelogin', googleLogin);
+authRouter.get('/test', (req, res) => {
+  res.send('Working');
+});
 
 export default authRouter

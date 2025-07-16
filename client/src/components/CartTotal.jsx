@@ -1,34 +1,47 @@
-import React, { useContext } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import Title from './Title'
+import React, { useContext, useEffect, useState } from 'react';
+import { ShopContext } from '../context/ShopContext';
+import Title from './Title';
 
 const CartTotal = () => {
+  const { currency, delivery_fee, getCartAmount } = useContext(ShopContext);
+  const [subtotal, setSubtotal] = useState(0);
 
-    const {currency,delivery_fee,getCartAmount} = useContext(ShopContext)
+  useEffect(() => {
+    const fetchSubtotal = async () => {
+      const amount = await getCartAmount();
+      setSubtotal(amount);
+    };
+    fetchSubtotal();
+  }, [getCartAmount]);
+
+  const total = subtotal === 0 ? 0 : subtotal + delivery_fee;
 
   return (
     <div className='w-full'>
-        <div className='text-2xl'>
-            <Title text1={'CART'} text2={'TOTALS'} />
-        </div>
-        <div className='flex flex-col gap-2 mt-2 text-sm'>
-            <div className='flex justify-between'>
-                <p>SubTotal</p>
-                <p>{currency} {getCartAmount()}.00</p>
-            </div>
-            <hr />
-            <div className='flex justify-between'>
-                <p>Shipping Fee</p>
-                <p>{currency} {delivery_fee}.00</p>
-            </div>
-            <hr />
-            <div className='flex justify-between'>
-                <b>Total</b>
-                <b>{currency} {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}.00</b>
-            </div>
-        </div>
-    </div>
-  )
-}
+      <div className='text-2xl font-semibold mb-4'>
+        <Title text1='CART' text2='TOTALS' />
+      </div>
+      <div className='space-y-4 text-sm text-gray-700'>
 
-export default CartTotal
+        <div className='flex justify-between'>
+          <span className='font-medium'>Subtotal:</span>
+          <span>{currency} {subtotal.toFixed(2)}</span>
+        </div>
+
+        <div className='flex justify-between'>
+          <span className='font-medium'>Shipping Fee:</span>
+          <span>{currency} {delivery_fee.toFixed(2)}</span>
+        </div>
+
+        <hr />
+
+        <div className='flex justify-between text-base font-semibold'>
+          <span>Total:</span>
+          <span>{currency} {total.toFixed(2)}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CartTotal;

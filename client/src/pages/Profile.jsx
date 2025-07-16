@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { CheckCircle, XCircle, Package, Settings } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ShopContext } from "../context/ShopContext";
 
 const Profile = () => {
+  const { backendUrl } = useContext(ShopContext);
+
   const [profile, setProfile] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
@@ -21,7 +24,7 @@ const Profile = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:4001/api/profile/get", {
+        const res = await axios.get(`${backendUrl}/api/profile/get`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -39,13 +42,13 @@ const Profile = () => {
       }
     };
     fetchProfile();
-  }, []);
+  }, [backendUrl]);
 
   const handleUpdate = async () => {
     setSaving(true);
     try {
       const res = await axios.put(
-        "http://localhost:4001/api/profile/update",
+        `${backendUrl}/api/profile/update`,
         {
           userId: profile._id,
           username: editData.username,
@@ -68,7 +71,6 @@ const Profile = () => {
     }
   };
 
-  
   if (loading) {
     return <div className="text-center mt-10 text-gray-500 text-lg">Loading...</div>;
   }
@@ -131,7 +133,7 @@ const Profile = () => {
                 onClick={async () => {
                   try {
                     const { data } = await axios.post(
-                      "http://localhost:4001/api/auth/send-verify-otp",
+                      `${backendUrl}/api/auth/send-verify-otp`,
                       {},
                       {
                         withCredentials: true,
@@ -165,8 +167,6 @@ const Profile = () => {
             >
               Edit Profile
             </button>
-
-            
 
             <button
               onClick={() => setSettingsModalOpen(false)}
