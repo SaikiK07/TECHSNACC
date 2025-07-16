@@ -66,32 +66,42 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
-      const { email, name } = decoded;
+  const handleGoogleSuccess = async (tokenResponse) => {
+  try {
+    const accessToken = tokenResponse.access_token;
 
-      const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
-        email,
-        name
-      });
+    // Call Google API to get user info
+    const resGoogle = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-      if (res.data.success) {
-        const token = res.data.token;
-        localStorage.setItem('token', token);
-        axios.defaults.headers.common['token'] = token;
-        setToken(token);
-        await getUserData(token);
-        setIsLoggedin(true);
-        toast.success("Google Login successful");
-        navigate('/');
-      } else {
-        toast.error(res.data.message || "Google login failed.");
-      }
-    } catch (err) {
-      toast.error("Google login failed.");
+    const { email, name } = resGoogle.data;
+
+    // Send email and name to your backend
+    const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
+      email,
+      name
+    });
+
+    if (res.data.success) {
+      const token = res.data.token;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['token'] = token;
+      setToken(token);
+      await getUserData(token);
+      setIsLoggedin(true);
+      toast.success("Google Login successful");
+      navigate('/');
+    } else {
+      toast.error(res.data.message || "Google login failed.");
     }
-  };
+  } catch (err) {
+    toast.error("Google login failed.");
+  }
+};
+
 
   return (
     <div>
