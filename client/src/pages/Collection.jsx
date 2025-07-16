@@ -33,7 +33,7 @@ const Collection = () => {
     };
 
     fetchFilters();
-  }, []);
+  }, [backendUrl]);
 
   const toggleBrand = (value) => {
     setSelectedBrands((prev) =>
@@ -47,55 +47,52 @@ const Collection = () => {
     );
   };
 
+  const sortProducts = (productsToSort) => {
+    let sorted = [...productsToSort];
+
+    switch (sortType) {
+      case 'low-high':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'high-low':
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case 'relavent':
+      default:
+        break; // no sorting needed
+    }
+
+    return sorted;
+  };
+
   const applyFilter = () => {
-    let productsCopy = [...products];
+    let filtered = [...products];
 
     if (selectedBrands.length > 0) {
-      productsCopy = productsCopy.filter((item) => selectedBrands.includes(item.brand));
+      filtered = filtered.filter((item) => selectedBrands.includes(item.brand));
     }
 
     if (selectedCategories.length > 0) {
-      productsCopy = productsCopy.filter((item) =>
+      filtered = filtered.filter((item) =>
         selectedCategories.includes(item.category?.name)
       );
     }
 
     if (showSearch && search) {
-      productsCopy = productsCopy.filter((item) =>
+      filtered = filtered.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    setFilterProducts(productsCopy);
+    const finalFiltered = sortProducts(filtered);
+    setFilterProducts(finalFiltered);
     setLoading(false);
-  };
-
-  const sortProducts = () => {
-    let sortedProducts = [...filterProducts];
-
-    switch (sortType) {
-      case 'low-high':
-        sortedProducts.sort((a, b) => a.price - b.price);
-        break;
-      case 'high-low':
-        sortedProducts.sort((a, b) => b.price - a.price);
-        break;
-      default:
-        applyFilter();
-        return;
-    }
-
-    setFilterProducts(sortedProducts);
   };
 
   useEffect(() => {
     setLoading(true);
     applyFilter();
-  }, [selectedBrands, selectedCategories, search, showSearch]);
-
-  useEffect(() => {
-    sortProducts();
-  }, [sortType]);
+  }, [selectedBrands, selectedCategories, search, showSearch, sortType, products]);
 
   useEffect(() => {
     if (products.length > 0) {
@@ -139,7 +136,7 @@ const Collection = () => {
                       className="hidden"
                       value={brand.name}
                       checked={selectedBrands.includes(brand.name)}
-                      onChange={toggleBrand}
+                      onChange={(e) => toggleBrand(e.target.value)}
                     />
                     {brand.name}
                   </label>
@@ -164,7 +161,7 @@ const Collection = () => {
                       className="hidden"
                       value={category.name}
                       checked={selectedCategories.includes(category.name)}
-                      onChange={toggleCategory}
+                      onChange={(e) => toggleCategory(e.target.value)}
                     />
                     {category.name}
                   </label>
@@ -175,13 +172,16 @@ const Collection = () => {
         )}
       </div>
 
-      {/* Product Listing */}
+      {/* PRODUCT LISTING */}
       <div className="flex-1">
         <div className="flex justify-between text-base sm:text-2xl mb-4">
           <Title text1="ALL" text2="COLLECTIONS" />
           <select
             className="border-2 border-gray-300 text-sm px-2"
-            onChange={(e) => setSortType(e.target.value)}
+            onChange={(e) => {
+              setSortType(e.target.value);
+              setLoading(true);
+            }}
           >
             <option value="relavent">Sort by: Relevant</option>
             <option value="low-high">Sort by: Low to High</option>
@@ -189,13 +189,12 @@ const Collection = () => {
           </select>
         </div>
 
-        {/* Loading Spinner */}
+        {/* LOADING STATE */}
         {loading ? (
           <div className="w-full py-20 text-center text-gray-600 text-sm animate-pulse">
             Loading products...
           </div>
         ) : filterProducts.length === 0 ? (
-          // Empty State
           <div className="w-full py-20 text-center text-gray-600 text-sm">
             😕 No products found matching the filters or search.
           </div>

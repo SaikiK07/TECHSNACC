@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
-import * as jwtDecode from 'jwt-decode';
+import jwt_decode from 'jwt-decode'; // Use default not `* as jwtDecode`
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -15,6 +16,34 @@ const Login = () => {
   const [captchaValue, setCaptchaValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfo = jwt_decode(tokenResponse.credential);
+        const { email, name } = userInfo;
+
+        const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, { email, name });
+
+        if (res.data.success) {
+          const token = res.data.token;
+          localStorage.setItem('token', token);
+          axios.defaults.headers.common['token'] = token;
+          setToken(token);
+          await getUserData(token);
+          setIsLoggedin(true);
+          toast.success('Google Login successful');
+          navigate('/');
+        } else {
+          toast.error(res.data.message || 'Google login failed.');
+        }
+      } catch (err) {
+        toast.error('Google login failed.');
+      }
+    },
+    onError: () => toast.error('Google login failed'),
+    flow: 'implicit', // OR 'auth-code' if you're handling on the backend
+  });
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -34,10 +63,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(backendUrl + '/api/auth/login', {
-        email,
-        password
-      });
+      const response = await axios.post(`${backendUrl}/api/auth/login`, { email, password });
 
       if (response.data.success) {
         const authToken = response.data.token;
@@ -57,33 +83,6 @@ const Login = () => {
       setIsLoggedin(false);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
-      const { email, name } = decoded;
-
-      const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
-        email,
-        name
-      });
-
-      if (res.data.success) {
-        const token = res.data.token;
-        localStorage.setItem('token', token);
-        axios.defaults.headers.common['token'] = token;
-        setToken(token);
-        await getUserData(token);
-        setIsLoggedin(true);
-        toast.success("Google Login successful");
-        navigate('/');
-      } else {
-        toast.error(res.data.message || "Google login failed.");
-      }
-    } catch (err) {
-      toast.error("Google login failed.");
     }
   };
 
@@ -153,19 +152,16 @@ const Login = () => {
             </button>
 
             {/* Google Login */}
-            <div className="flex justify-center">
-                <div className="max-w-[300px] w-full">
-                  <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={() => toast.error("Google login failed")}
-                    theme="outline"
-                    size="large"
-                    shape="pill"
-                  />
-                </div>
-              </div>
-
-
+            <div className="flex justify-center mt-6">
+              <button
+                type="button"
+                onClick={() => googleLogin()}
+                className="flex items-center gap-3 px-6 py-3 rounded-full bg-white shadow-md hover:shadow-lg transition hover:bg-gray-100 border border-gray-300"
+              >
+                <FcGoogle className="text-2xl" />
+                <span className="text-gray-700 font-medium">Continue with Google</span>
+              </button>
+            </div>
           </form>
         </div>
       </section>
