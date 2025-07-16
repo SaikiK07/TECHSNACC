@@ -6,17 +6,16 @@ import ProductItem from '../components/ProductItem';
 import axios from 'axios';
 
 const Collection = () => {
-  const { products, search, showSearch } = useContext(ShopContext);
+  const { products, search, showSearch, backendUrl } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
-  const {backendUrl} = useContext(ShopContext);
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [sortType, setSortType] = useState('relavent');
 
-  // Fetch brands & categories from backend
+  // ✅ Fetch brands & categories from backend
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -24,7 +23,6 @@ const Collection = () => {
           axios.get(`${backendUrl}/api/brand/list`),
           axios.get(`${backendUrl}/api/category/list`)
         ]);
-
         if (brandRes.data.success) setBrands(brandRes.data.brands);
         if (categoryRes.data.success) setCategories(categoryRes.data.categories);
       } catch (error) {
@@ -33,71 +31,63 @@ const Collection = () => {
     };
 
     fetchFilters();
-  }, []);
+  }, [backendUrl]);
 
+  // ✅ Handlers for toggling filters
   const toggleBrand = (e) => {
     const value = e.target.value;
-    setSelectedBrands(prev =>
-      prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
+    setSelectedBrands((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
   };
 
   const toggleCategory = (e) => {
     const value = e.target.value;
-    setSelectedCategories(prev =>
-      prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
+    setSelectedCategories((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
   };
 
+  // ✅ Filtering logic
   const applyFilter = () => {
-    let productsCopy = [...products];
+    let filtered = [...products];
 
     if (selectedBrands.length > 0) {
-      productsCopy = productsCopy.filter(item => selectedBrands.includes(item.brand));
+      filtered = filtered.filter((item) =>
+        selectedBrands.includes(item.brand?.name)
+      );
     }
 
     if (selectedCategories.length > 0) {
-      productsCopy = productsCopy.filter(item => selectedCategories.includes(item.category?.name));
+      filtered = filtered.filter((item) =>
+        selectedCategories.includes(item.category?.name)
+      );
     }
 
     if (showSearch && search) {
-      productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
     }
 
-    setFilterProducts(productsCopy);
+    setFilterProducts(filtered);
   };
 
-  const sortProducts = () => {
-    let sortedProducts = [...filterProducts];
-
-    switch (sortType) {
-      case 'low-high':
-        sortedProducts.sort((a, b) => a.price - b.price);
-        break;
-      case 'high-low':
-        sortedProducts.sort((a, b) => b.price - a.price);
-        break;
-      default:
-        applyFilter();
-        return;
+  // ✅ Sorting logic
+  useEffect(() => {
+    let sorted = [...filterProducts];
+    if (sortType === 'low-high') {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortType === 'high-low') {
+      sorted.sort((a, b) => b.price - a.price);
     }
-
-    setFilterProducts(sortedProducts);
-  };
-
-  useEffect(() => {
-    applyFilter();
-  }, [selectedBrands, selectedCategories, search, showSearch]);
-
-  useEffect(() => {
-    sortProducts();
+    setFilterProducts(sorted);
   }, [sortType]);
 
+  // ✅ Apply filters when selections change
   useEffect(() => {
-    if (products.length > 0) {
-      setFilterProducts(products);
-    }
-  }, [products]);
+    applyFilter();
+  }, [selectedBrands, selectedCategories, search, showSearch, products]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
@@ -113,10 +103,16 @@ const Collection = () => {
           <p className="mb-3 text-sm font-medium">BRANDS</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
             {brands.map((brand) => (
-              <p key={brand._id} className="flex gap-2">
-                <input type="checkbox" className="w-3" value={brand.name} onChange={toggleBrand} />
+              <label key={brand._id} className={`flex items-center gap-2 cursor-pointer ${selectedBrands.includes(brand.name) ? 'text-green-700 font-medium' : ''}`}>
+                <input
+                  type="checkbox"
+                  className="w-3 accent-green-700"
+                  value={brand.name}
+                  onChange={toggleBrand}
+                  checked={selectedBrands.includes(brand.name)}
+                />
                 {brand.name}
-              </p>
+              </label>
             ))}
           </div>
         </div>
@@ -126,10 +122,16 @@ const Collection = () => {
           <p className="mb-3 text-sm font-medium">CATEGORIES</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
             {categories.map((category) => (
-              <p key={category._id} className="flex gap-2">
-                <input type="checkbox" className="w-3" value={category.name} onChange={toggleCategory} />
+              <label key={category._id} className={`flex items-center gap-2 cursor-pointer ${selectedCategories.includes(category.name) ? 'text-green-700 font-medium' : ''}`}>
+                <input
+                  type="checkbox"
+                  className="w-3 accent-green-700"
+                  value={category.name}
+                  onChange={toggleCategory}
+                  checked={selectedCategories.includes(category.name)}
+                />
                 {category.name}
-              </p>
+              </label>
             ))}
           </div>
         </div>
@@ -139,8 +141,11 @@ const Collection = () => {
       <div className="flex-1">
         <div className="flex justify-between text-base sm:text-2xl mb-4">
           <Title text1="ALL" text2="COLLECTIONS" />
-          {/* Sorting Dropdown */}
-          <select className="border-2 border-gray-300 text-sm px-2" onChange={(e) => setSortType(e.target.value)}>
+          <select
+            className="border-2 border-gray-300 text-sm px-2"
+            onChange={(e) => setSortType(e.target.value)}
+            value={sortType}
+          >
             <option value="relavent">Sort by: Relevant</option>
             <option value="low-high">Sort by: Low to High</option>
             <option value="high-low">Sort by: High to Low</option>
@@ -149,9 +154,9 @@ const Collection = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-          {filterProducts.map((item, index) => (
+          {filterProducts.map((item) => (
             <ProductItem
-              key={index}
+              key={item._id}
               id={item._id}
               name={item.name}
               image={item.image}
