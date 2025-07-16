@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { assets } from '../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
 import * as jwtDecode from 'jwt-decode';
 
 const Login = () => {
@@ -15,6 +14,26 @@ const Login = () => {
   const [captchaValue, setCaptchaValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (window.google && window.google.accounts?.id) {
+      window.google.accounts.id.initialize({
+        client_id: "556974166740-ml0ibptmk1ttttmfpjc244ppiqsd2c9b.apps.googleusercontent.com", // ✅ Replace with your client ID
+        callback: handleGoogleSuccess,
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-login-btn"),
+        {
+          theme: "outline",
+          size: "large",
+          width: "300",
+          shape: "pill",
+          logo_alignment: "left",
+        }
+      );
+    }
+  }, []);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -60,9 +79,9 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleSuccess = async (response) => {
     try {
-      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
+      const decoded = jwtDecode.jwtDecode(response.credential);
       const { email, name } = decoded;
 
       const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
@@ -90,7 +109,7 @@ const Login = () => {
   return (
     <div>
       <section className="relative flex flex-wrap lg:items-center mt-16">
-        {/* Left */}
+        {/* Left Side */}
         <div
           className="relative lg:h-[600px] h-96 w-full lg:w-1/2 bg-image text-white rounded-3xl"
           style={{ backgroundImage: `url(${assets.h5})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
@@ -101,7 +120,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right */}
+        {/* Right Side */}
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
             <h1 className="text-3xl font-bold sm:text-4xl mb-4 lg:mt-24 mt-14 text-green-800 hover:text-green-900">LOGIN</h1>
@@ -131,7 +150,7 @@ const Login = () => {
             </label>
 
             <ReCAPTCHA
-             sitekey="6LeqdYUrAAAAAJnldJrzjkAR__EXQv9odCTG6OV8"
+              sitekey="6LeqdYUrAAAAAJnldJrzjkAR__EXQv9odCTG6OV8"
               onChange={(value) => setCaptchaValue(value)}
             />
 
@@ -149,22 +168,13 @@ const Login = () => {
               disabled={loading}
               className={`inline-block rounded-full px-5 py-3 text-sm font-medium w-full text-white ${loading ? 'bg-gray-400' : 'bg-green-800 hover:bg-green-900'}`}
             >
-              {loading ? 'loging in...' : 'LOGIN'}
+              {loading ? 'Logging in...' : 'LOGIN'}
             </button>
 
-            {/* Google Login */}
-            <div className="glogin-wrapper not-prose isolate z-10">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => toast.error("Google login failed")}
-                useOneTap
-                theme="outline"
-                size="large"
-                shape="pill"
-                width="100%"
-              />
+            <div className="text-center mt-4">
+              <p className="mb-2 text-gray-500">Or login with Google</p>
+              <div id="google-login-btn" className="flex justify-center"></div>
             </div>
-
           </form>
         </div>
       </section>
