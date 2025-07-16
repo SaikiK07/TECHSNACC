@@ -31,12 +31,14 @@ mongoose.connect(URI, {
   console.error("❌ Failed to connect to MongoDB", err);
 });
 
-
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://techsnacc.vercel.app', 
+  'https://techsnacc.vercel.app',
+  'https://techsnacc-admin.vercel.app',
+  'https://techsnacc.onrender.com',
 ];
+
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
