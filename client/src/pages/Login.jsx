@@ -7,6 +7,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 import * as jwtDecode from 'jwt-decode';
+import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from "react-icons/fc"; // install via: npm i react-icons
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -15,6 +17,10 @@ const Login = () => {
   const [captchaValue, setCaptchaValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const googleLogin = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: () => toast.error("Google login failed"),
+  });
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -153,17 +159,17 @@ const Login = () => {
             </button>
 
             {/* Google Login */}
-        <div className="flex justify-center">
-          <div className="max-w-xs">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => toast.error("Google login failed")}
-              theme="outline"
-              size="large"
-              shape="pill"
-            />
-          </div>
-        </div>
+        <div className="flex justify-center mt-6">
+  <button
+    type="button"
+    onClick={googleLogin}
+    className="flex items-center gap-3 px-6 py-3 rounded-full bg-white shadow-md hover:shadow-lg transition hover:bg-gray-100 border border-gray-300"
+  >
+    <FcGoogle className="text-2xl" />
+    <span className="text-gray-700 font-medium">Continue with Google</span>
+  </button>
+</div>
+
 
 
 
