@@ -22,7 +22,6 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const URI = process.env.MongoDBURI;
 
-// ✅ Connect to MongoDB with error handling and better config
 mongoose.connect(URI, {
   ssl: true,
   tlsAllowInvalidCertificates: false,
@@ -32,16 +31,17 @@ mongoose.connect(URI, {
   console.error("❌ Failed to connect to MongoDB", err);
 });
 
-// ✅ CORS Config
+
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://techsnacc.onrender.com', // if deployed frontend
+  'https://techsnacc.vercel.app', 
 ];
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
+
 
 // ✅ Middleware
 app.use(express.json());
