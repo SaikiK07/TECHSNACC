@@ -7,8 +7,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 import * as jwtDecode from 'jwt-decode';
-import { useGoogleLogin } from '@react-oauth/google';
-import { FcGoogle } from "react-icons/fc"; // install via: npm i react-icons
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -17,10 +15,6 @@ const Login = () => {
   const [captchaValue, setCaptchaValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const googleLogin = useGoogleLogin({
-    onSuccess: handleGoogleSuccess,
-    onError: () => toast.error("Google login failed"),
-  });
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -66,42 +60,32 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = async (tokenResponse) => {
-  try {
-    const accessToken = tokenResponse.access_token;
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode.jwtDecode(credentialResponse.credential);
+      const { email, name } = decoded;
 
-    // Call Google API to get user info
-    const resGoogle = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+      const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
+        email,
+        name
+      });
 
-    const { email, name } = resGoogle.data;
-
-    // Send email and name to your backend
-    const res = await axios.post(backendUrl + '/api/auth/googlelogin', {
-      email,
-      name
-    });
-
-    if (res.data.success) {
-      const token = res.data.token;
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['token'] = token;
-      setToken(token);
-      await getUserData(token);
-      setIsLoggedin(true);
-      toast.success("Google Login successful");
-      navigate('/');
-    } else {
-      toast.error(res.data.message || "Google login failed.");
+      if (res.data.success) {
+        const token = res.data.token;
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['token'] = token;
+        setToken(token);
+        await getUserData(token);
+        setIsLoggedin(true);
+        toast.success("Google Login successful");
+        navigate('/');
+      } else {
+        toast.error(res.data.message || "Google login failed.");
+      }
+    } catch (err) {
+      toast.error("Google login failed.");
     }
-  } catch (err) {
-    toast.error("Google login failed.");
-  }
-};
-
+  };
 
   return (
     <div>
@@ -169,19 +153,17 @@ const Login = () => {
             </button>
 
             {/* Google Login */}
-        <div className="flex justify-center mt-6">
-  <button
-    type="button"
-    onClick={googleLogin}
-    className="flex items-center gap-3 px-6 py-3 rounded-full bg-white shadow-md hover:shadow-lg transition hover:bg-gray-100 border border-gray-300"
-  >
-    <FcGoogle className="text-2xl" />
-    <span className="text-gray-700 font-medium">Continue with Google</span>
-  </button>
-</div>
-
-
-
+            <div className="flex justify-center">
+                <div className="max-w-[300px] w-full">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => toast.error("Google login failed")}
+                    theme="outline"
+                    size="large"
+                    shape="pill"
+                  />
+                </div>
+              </div>
 
 
           </form>
