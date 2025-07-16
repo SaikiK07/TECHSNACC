@@ -1,6 +1,6 @@
 import categoryModel from "../modles/categoryModel.js";
 
-// Fetch all categories
+// ✅ Fetch all categories
 export const getCategories = async (req, res) => {
   try {
     const categories = await categoryModel.find();
@@ -10,17 +10,17 @@ export const getCategories = async (req, res) => {
   }
 };
 
-// Add a new category
+// ✅ Add a new category
 export const addCategory = async (req, res) => {
   try {
     const { name, attributes } = req.body;
-    if (!name || !attributes) {
-      return res.json({ success: false, message: "All fields are required" });
+    if (!name || !attributes || !Array.isArray(attributes)) {
+      return res.json({ success: false, message: "All fields are required and attributes must be an array" });
     }
 
-    const attributeArray = attributes
-      .split(",")
-      .map(attr => ({ name: attr.trim() })); // ✅ Convert to object with name field
+    const attributeArray = attributes.map(attr =>
+      typeof attr === "string" ? { name: attr.trim() } : attr
+    );
 
     const newCategory = new categoryModel({
       name,
@@ -34,8 +34,7 @@ export const addCategory = async (req, res) => {
   }
 };
 
-
-// Delete a category
+// ✅ Delete a category
 export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.body;
@@ -48,18 +47,17 @@ export const deleteCategory = async (req, res) => {
   }
 };
 
-
-// Update category
+// ✅ Update category
 export const updateCategory = async (req, res) => {
   try {
     const { id, name, attributes } = req.body;
-    if (!id || !name || !attributes) {
-      return res.json({ success: false, message: "All fields are required" });
+    if (!id || !name || !attributes || !Array.isArray(attributes)) {
+      return res.json({ success: false, message: "All fields are required and attributes must be an array" });
     }
 
-    const updatedAttributes = attributes
-      .split(",")
-      .map(attr => ({ name: attr.trim() })); // ✅ Convert to object
+    const updatedAttributes = attributes.map(attr =>
+      typeof attr === "string" ? { name: attr.trim() } : attr
+    );
 
     const category = await categoryModel.findByIdAndUpdate(
       id,
