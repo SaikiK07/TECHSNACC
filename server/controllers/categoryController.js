@@ -18,7 +18,9 @@ export const addCategory = async (req, res) => {
       return res.json({ success: false, message: "All fields are required" });
     }
 
-    const attributeArray = attributes.split(",").map(attr => attr.trim());
+    const attributeArray = attributes
+      .split(",")
+      .map(attr => ({ name: attr.trim() })); // ✅ Convert to object with name field
 
     const newCategory = new categoryModel({
       name,
@@ -31,6 +33,7 @@ export const addCategory = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
 
 // Delete a category
 export const deleteCategory = async (req, res) => {
@@ -54,7 +57,9 @@ export const updateCategory = async (req, res) => {
       return res.json({ success: false, message: "All fields are required" });
     }
 
-    const updatedAttributes = attributes.split(",").map(attr => attr.trim());
+    const updatedAttributes = attributes
+      .split(",")
+      .map(attr => ({ name: attr.trim() })); // ✅ Convert to object
 
     const category = await categoryModel.findByIdAndUpdate(
       id,
