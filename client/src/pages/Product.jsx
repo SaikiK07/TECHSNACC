@@ -42,15 +42,22 @@ const Product = () => {
     }
   }, [productId]);
 
-  const fetchProductData = async () => {
-    products.map((item) => {
-      if (item._id === productId) {
-        setProductData(item);
-        setImage(item.image[0]);
-        return null;
-      }
-    });
-  };
+ const fetchProductData = async () => {
+  try {
+    const res = await axios.post(`${backendUrl}/api/product/single`, { productId });
+    if (res.data.success) {
+      const item = res.data.product;
+      setProductData(item);
+      setImage(item.image[0]);
+    } else {
+      toast.error("Failed to fetch product");
+    }
+  } catch (err) {
+    toast.error("Error fetching product");
+    console.error(err);
+  }
+};
+
 
   useEffect(() => {
     fetchProductData();
@@ -146,19 +153,21 @@ const Product = () => {
           <div className="flex flex-col gap-4 my-8">
             <p>Select Option:</p>
             <div className="flex gap-2">
-              {productData.category.attributes.map((item, index) => (
-                <button
-                  onClick={() => setCat(item)}
-                  className={`border py-2 px-4 bg-gray-100 ${
-                    item === cat ? 'border-orange-500' : ''
-                  }`}
-                  key={index}
-                >
-                  {item}
-                </button>
-              ))}
+              {Array.isArray(productData?.category?.attributes) &&
+                productData.category.attributes.map((item, index) => (
+                  <button
+                    onClick={() => setCat(item)}
+                    className={`border py-2 px-4 bg-gray-100 ${
+                      (item.name || item) === (cat.name || cat) ? 'border-orange-500' : ''
+                    }`}
+                    key={index}
+                  >
+                    {item.name || item}
+                  </button>
+                ))}
             </div>
           </div>
+
           <button
             onClick={() => addToCart(productData._id, cat)}
             className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"

@@ -91,16 +91,23 @@ const removeProduct = async (req, res) => {
 };
 
 // Get a single product
-const singleProduct = async (req, res) => {
-    try {
-        const { productId } = req.body;
-        const product = await productModel.findById(productId).populate("category");
-        res.json({ success: true, product });
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: error.message });
+export const singleProduct = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const product = await productModel
+      .findById(productId)
+      .populate("category"); // ✅ Important: populate category
+
+    if (!product) {
+      return res.json({ success: false, message: "Product not found" });
     }
+
+    res.json({ success: true, product });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
 };
+
 
 const updateProduct = async (req, res) => {
     try {
