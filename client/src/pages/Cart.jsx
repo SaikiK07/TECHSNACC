@@ -75,11 +75,7 @@ const Cart = () => {
                       <div>
                         <h3 className='text-lg font-semibold text-gray-800'>{product.name}</h3>
                         <div className='flex flex-wrap gap-2 mt-2 text-sm text-gray-600'>
-                          <span className='bg-gray-100 px-2 py-0.5 rounded'>
-                            {typeof item.attributes === 'string'
-                              ? item.attributes
-                              : item.attributes?.name || '[Invalid Attribute]'}
-                          </span>
+
                           <span>{currency}{product.price}</span>
                         </div>
                       </div>
