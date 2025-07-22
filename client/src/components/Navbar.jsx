@@ -1,27 +1,37 @@
 import React, { useContext, useState } from 'react'
-import { assets } from '../assets/assets'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
 import { toast } from 'react-toastify'
+import { assets } from '../assets/assets'
 import axios from 'axios'
 
 const Navbar = () => {
   const navigate = useNavigate()
   const [visible, setVisible] = useState(false)
 
-  const { setShowSearch } = useContext(ShopContext)
-  const { token, setToken, getCartCount, userData, setUserData, backendUrl, setIsLoggedin } = useContext(ShopContext)
+  const {
+    setShowSearch,
+    token,
+    setToken,
+    getCartCount,
+    userData,
+    setUserData,
+    backendUrl,
+    setIsLoggedin,
+  } = useContext(ShopContext)
 
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true
       const { data } = await axios.post(backendUrl + '/api/auth/logout')
-      data.success && setIsLoggedin(false)
-      data.success && setUserData(false)
-      localStorage.removeItem('token')
-      setToken('')
-      navigate('/login')
-      window.location.reload()
+      if (data.success) {
+        setIsLoggedin(false)
+        setUserData(false)
+        localStorage.removeItem('token')
+        setToken('')
+        navigate('/login')
+        window.location.reload()
+      }
     } catch (error) {
       toast.error(error.message)
     }
@@ -43,97 +53,117 @@ const Navbar = () => {
   }
 
   return (
-    <div className='flex items-center justify-between py-5 font-medium'>
-      <Link to='/'>
-        <h1 className='w-36'>TECHSNACC</h1>
-      </Link>
-
-      <ul className='hidden sm:flex gap-5 text-sm text-gray-700'>
-        <NavLink to='/' className='flex flex-col items-center gap-1'>
-          <p>HOME</p>
-          <hr className='w-2/4 border-none h-[1.5px] bg-green-700 hidden' />
-        </NavLink>
-        <NavLink to='/collection' className='flex flex-col items-center gap-1'>
-          <p>COLLECTION</p>
-          <hr className='w-2/4 border-none h-[1.5px] bg-green-700 hidden' />
-        </NavLink>
-        <NavLink to='/about' className='flex flex-col items-center gap-1'>
-          <p>ABOUT</p>
-          <hr className='w-2/4 border-none h-[1.5px] bg-green-700 hidden' />
-        </NavLink>
-        <NavLink to='/contact' className='flex flex-col items-center gap-1'>
-          <p>CONTACT</p>
-          <hr className='w-2/4 border-none h-[1.5px] bg-green-700 hidden' />
-        </NavLink>
-      </ul>
-
-      <div className='flex items gap-6'>
-        <Link to='/collection'>
-          <img onClick={() => setShowSearch(true)} src={assets.search_icon} alt='' className='w-5 cursor-pointer' />
+    <header className="w-full shadow-md bg-white z-50 fixed top-0 left-0">
+      <nav className="max-w-6xl mx-auto px-4 sm:px-8 flex justify-between items-center py-4">
+        {/* Logo */}
+        <Link to="/" className="text-xl font-bold tracking-widest text-black">
+          TECHSNACC
         </Link>
 
-        {userData ? (
-          <div className='group z-50 w-7 h-7 flex justify-center items-center rounded-full bg-black text-white relative group'>
-            {userData.name[0].toUpperCase()}
-            <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10'>
-              <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
-                <p onClick={() => navigate('/profile')} className='cursor-pointer hover:text-black'>
+        {/* Nav Links */}
+        <ul className="hidden sm:flex gap-6 items-center text-sm font-medium text-gray-700">
+          {['/', '/collection', '/about', '/contact'].map((path, index) => (
+            <NavLink
+              key={index}
+              to={path}
+              className={({ isActive }) =>
+                `hover:text-black transition relative group ${
+                  isActive ? 'text-black' : ''
+                }`
+              }
+            >
+              <span>{path === '/' ? 'HOME' : path.replace('/', '').toUpperCase()}</span>
+              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-green-700 group-hover:w-full transition-all duration-300"></span>
+            </NavLink>
+          ))}
+        </ul>
+
+        {/* Right Icons */}
+        <div className="flex items-center gap-5">
+          <img
+            onClick={() => setShowSearch(true)}
+            src={assets.search_icon}
+            alt="search"
+            className="w-5 cursor-pointer"
+          />
+
+          {userData ? (
+            <div className="relative group">
+              <div className="w-8 h-8 flex justify-center items-center bg-black text-white rounded-full cursor-pointer">
+                {userData.name[0].toUpperCase()}
+              </div>
+              <div className="absolute right-0 mt-2 hidden group-hover:flex flex-col bg-white shadow-md rounded-md py-2 w-40 z-50 text-sm text-gray-600">
+                <span
+                  onClick={() => navigate('/profile')}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
                   Profile
-                </p>
-                <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>
+                </span>
+                <span
+                  onClick={() => navigate('/orders')}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
                   Orders
-                </p>
-                <p onClick={logout} className='cursor-pointer hover:text-black'>
+                </span>
+                <span
+                  onClick={logout}
+                  className="px-4 py-2 text-red-500 hover:bg-red-50 cursor-pointer"
+                >
                   Logout
-                </p>
+                </span>
               </div>
             </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => navigate('/login')}
-            className='text-sm px-3 py-[6px] border border-black rounded hover:bg-black hover:text-white transition'
-          >
-            Login
-          </button>
-        )}
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="px-3 py-[6px] text-sm border border-black rounded hover:bg-black hover:text-white transition"
+            >
+              Login
+            </button>
+          )}
 
-        <Link to='/cart' className='relative'>
-          <img src={assets.cart_icon} alt='' className='w-5 min-w-5' />
-          <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]'>
-            {getCartCount()}
-          </p>
-        </Link>
-        <img onClick={() => setVisible(true)} src={assets.menu_icon} alt='' className='w-5 cursor-pointer sm:hidden' />
-      </div>
+          <Link to="/cart" className="relative">
+            <img src={assets.cart_icon} alt="cart" className="w-5" />
+            <span className="absolute -bottom-1 -right-2 bg-black text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+              {getCartCount()}
+            </span>
+          </Link>
 
-      {/* Sidebar menu for smaller screen */}
+          {/* Mobile Menu Icon */}
+          <img
+            onClick={() => setVisible(true)}
+            src={assets.menu_icon}
+            alt="menu"
+            className="w-5 cursor-pointer sm:hidden"
+          />
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
       <div
-        className={`absolute h-64 top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
-          visible ? 'w-full' : 'w-0'
-        } z-50`}
+        className={`fixed top-0 right-0 h-full w-3/4 max-w-sm bg-white shadow-lg transition-transform duration-300 z-50 ${
+          visible ? 'translate-x-0' : 'translate-x-full'
+        }`}
       >
-        <div className='flex flex-col text-gray-600'>
-          <div onClick={() => setVisible(false)} className='flex items-center gap-4 p-3 cursor-pointer'>
-            <svg className='swap-on fill-current' xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 512 512'>
-              <polygon points='400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49' />
-            </svg>
-          </div>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/'>
+        <div className="flex flex-col text-gray-700 p-6 gap-4">
+          <button onClick={() => setVisible(false)} className="self-end text-2xl">
+            &times;
+          </button>
+          <NavLink onClick={() => setVisible(false)} to="/" className="border-b pb-2">
             HOME
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/collection'>
+          <NavLink onClick={() => setVisible(false)} to="/collection" className="border-b pb-2">
             COLLECTION
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/about'>
+          <NavLink onClick={() => setVisible(false)} to="/about" className="border-b pb-2">
             ABOUT
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/contact'>
+          <NavLink onClick={() => setVisible(false)} to="/contact" className="border-b pb-2">
             CONTACT
           </NavLink>
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 
