@@ -317,39 +317,63 @@ export const removeUser = async (req, res) => {
 
 }
 
-
 export const googleLogin = async (req, res) => {
   const { email, name } = req.body;
 
+  // Step 1: Validate input
+  if (!email) {
+    return res.json({ success: false, message: 'Email is required' });
+  }
+
   try {
+    // Step 2: Try to find the user
     let user = await userModel.findOne({ email });
 
+    // Step 3: Create new user if not found
     if (!user) {
-      const generatedUsername = email.split('@')[0] + Math.floor(Math.random() * 10000);
+      const generatedUsername = email.split('@')[0] + Math.floor(1000 + Math.random() * 9000); // Safer random
       const dummyPassword = await bcrypt.hash(email + process.env.JWT_SECRET, 10);
+      const userName = name || email.split('@')[0]; // fallback if no name provided
 
       user = new userModel({
-        name,
+        name: userName,
         email,
         username: generatedUsername,
         password: dummyPassword,
-        isAccountVerified: true
+        isAccountVerified: true,
       });
 
       await user.save();
+      console.log(`[GoogleLogin] ✅ New user created: ${email}`);
+    } else {
+      console.log(`[GoogleLogin] 🔁 Existing user logged in: ${email}`);
     }
 
+    // Step 4: Create JWT token
     const token = createToken(user._id);
 
+    // Step 5: Set token cookie
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production',
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    return res.json({ success: true, token });
+    // Step 6: Respond with token and basic user data
+    return res.json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+      },
+    });
+
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    console.error('[GoogleLogin] ❌ Error:', error);
+    res.json({ success: false, message: 'Google login failed. Please try again later.' });
   }
 };

@@ -17,15 +17,18 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const googleLogin = useGoogleLogin({
+ const googleLogin = useGoogleLogin({
   onSuccess: async (tokenResponse) => {
     try {
       const { access_token } = tokenResponse;
 
-      // Use access token to fetch user info
       const googleRes = await axios.get(
         'https://www.googleapis.com/oauth2/v3/userinfo',
-        { headers: { Authorization: `Bearer ${access_token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
       );
 
       const { email, name } = googleRes.data;
@@ -45,12 +48,13 @@ const Login = () => {
         toast.error(res.data.message || 'Google login failed.');
       }
     } catch (err) {
+      console.error('[Google Login Error]', err);
       toast.error('Google login failed.');
     }
   },
   onError: () => toast.error('Google login failed'),
-  flow: 'auth-code',
 });
+
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
