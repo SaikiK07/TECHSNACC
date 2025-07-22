@@ -5,9 +5,8 @@ import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { useGoogleLogin } from '@react-oauth/google';
-import { FcGoogle } from 'react-icons/fc';
+import jwtDecode from 'jwt-decode';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const { backendUrl, setToken, setIsLoggedin, getUserData } = useContext(ShopContext);
@@ -17,23 +16,15 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
- const googleLogin = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
     try {
-      const { access_token } = tokenResponse;
+      const decoded = jwtDecode(credentialResponse.credential);
+      const { email, name } = decoded;
 
-      const googleRes = await axios.get(
-        'https://www.googleapis.com/oauth2/v3/userinfo',
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      const { email, name } = googleRes.data;
-
-      const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, { email, name });
+      const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, {
+        email,
+        name,
+      });
 
       if (res.data.success) {
         const token = res.data.token;
@@ -51,10 +42,11 @@ const Login = () => {
       console.error('[Google Login Error]', err);
       toast.error('Google login failed.');
     }
-  },
-  onError: () => toast.error('Google login failed'),
-});
+  };
 
+  const handleGoogleLoginError = () => {
+    toast.error('Google login failed');
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -164,14 +156,11 @@ const Login = () => {
 
             {/* Google Login */}
             <div className="flex justify-center mt-6">
-              <button
-                type="button"
-                onClick={() => googleLogin()}
-                className="flex items-center gap-3 px-6 py-3 rounded-full bg-white shadow-md hover:shadow-lg transition hover:bg-gray-100 border border-gray-300"
-              >
-                <FcGoogle className="text-2xl" />
-                <span className="text-gray-700 font-medium">Continue with Google</span>
-              </button>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginError}
+                width="280"
+              />
             </div>
           </form>
         </div>
