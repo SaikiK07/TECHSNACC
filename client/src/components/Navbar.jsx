@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { ShopContext } from '../context/ShopContext'
-import { toast } from 'react-toastify'
-import { assets } from '../assets/assets'
-import axios from 'axios'
+import React, { useContext, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { ShopContext } from '../context/ShopContext';
+import { toast } from 'react-toastify';
+import { assets } from '../assets/assets';
+import axios from 'axios';
 
 const Navbar = () => {
-  const navigate = useNavigate()
-  const [visible, setVisible] = useState(false)
+  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
 
   const {
     setShowSearch,
@@ -17,50 +17,50 @@ const Navbar = () => {
     userData,
     setUserData,
     backendUrl,
-    setIsLoggedin,
-  } = useContext(ShopContext)
+    setIsLoggedin
+  } = useContext(ShopContext);
 
   const logout = async () => {
     try {
-      axios.defaults.withCredentials = true
-      const { data } = await axios.post(backendUrl + '/api/auth/logout')
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + '/api/auth/logout');
       if (data.success) {
-        setIsLoggedin(false)
-        setUserData(false)
-        localStorage.removeItem('token')
-        setToken('')
-        navigate('/login')
-        window.location.reload()
+        setIsLoggedin(false);
+        setUserData(null); // ✅ use null instead of false
+        localStorage.removeItem('token');
+        setToken('');
+        navigate('/login');
+        window.location.reload(); // ✅ if needed to fully reset context
       }
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   const sendVerificationOtp = async () => {
     try {
-      axios.defaults.withCredentials = true
-      const { data } = await axios.post(backendUrl + '/api/auth/send-verify-otp')
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + '/api/auth/send-verify-otp');
       if (data.success) {
-        navigate('/email-verify')
-        toast.success(data.message)
+        navigate('/email-verify');
+        toast.success(data.message);
       } else {
-        toast.error(data.message)
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   return (
-    <header className="w-full shadow-md bg-white z-50 fixed top-0 left-0">
+    <header className="w-full shadow-md bg-white z-50 left-0">
       <nav className="max-w-6xl mx-auto px-4 sm:px-8 flex justify-between items-center py-4">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold tracking-widest text-black">
           TECHSNACC
         </Link>
 
-        {/* Nav Links */}
+        {/* Desktop Links */}
         <ul className="hidden sm:flex gap-6 items-center text-sm font-medium text-gray-700">
           {['/', '/collection', '/about', '/contact'].map((path, index) => (
             <NavLink
@@ -78,10 +78,13 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Right Icons */}
+        {/* Right Controls */}
         <div className="flex items-center gap-5">
           <img
-            onClick={() => setShowSearch(true)}
+            onClick={() => {
+              setShowSearch(true); // ✅ fix search visibility
+              navigate('/collection'); // ensure navigation if needed
+            }}
             src={assets.search_icon}
             alt="search"
             className="w-5 cursor-pointer"
@@ -90,7 +93,7 @@ const Navbar = () => {
           {userData ? (
             <div className="relative group">
               <div className="w-8 h-8 flex justify-center items-center bg-black text-white rounded-full cursor-pointer">
-                {userData.name[0].toUpperCase()}
+                {userData.name?.[0]?.toUpperCase()}
               </div>
               <div className="absolute right-0 mt-2 hidden group-hover:flex flex-col bg-white shadow-md rounded-md py-2 w-40 z-50 text-sm text-gray-600">
                 <span
@@ -129,7 +132,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Mobile Menu Icon */}
           <img
             onClick={() => setVisible(true)}
             src={assets.menu_icon}
@@ -164,7 +166,7 @@ const Navbar = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
