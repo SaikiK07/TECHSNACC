@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
