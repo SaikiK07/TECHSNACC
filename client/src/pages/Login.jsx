@@ -18,32 +18,39 @@ const Login = () => {
   const navigate = useNavigate();
 
   const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const userInfo = jwtDecode(tokenResponse.credential);
-        const { email, name } = userInfo;
+  onSuccess: async (tokenResponse) => {
+    try {
+      const { access_token } = tokenResponse;
 
-        const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, { email, name });
+      // Use access token to fetch user info
+      const googleRes = await axios.get(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        { headers: { Authorization: `Bearer ${access_token}` } }
+      );
 
-        if (res.data.success) {
-          const token = res.data.token;
-          localStorage.setItem('token', token);
-          axios.defaults.headers.common['token'] = token;
-          setToken(token);
-          await getUserData(token);
-          setIsLoggedin(true);
-          toast.success('Google Login successful');
-          navigate('/');
-        } else {
-          toast.error(res.data.message || 'Google login failed.');
-        }
-      } catch (err) {
-        toast.error('Google login failed.');
+      const { email, name } = googleRes.data;
+
+      const res = await axios.post(`${backendUrl}/api/auth/googlelogin`, { email, name });
+
+      if (res.data.success) {
+        const token = res.data.token;
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['token'] = token;
+        setToken(token);
+        await getUserData(token);
+        setIsLoggedin(true);
+        toast.success('Google Login successful');
+        navigate('/');
+      } else {
+        toast.error(res.data.message || 'Google login failed.');
       }
-    },
-    onError: () => toast.error('Google login failed'),
-    flow: 'implicit', // OR 'auth-code' if you're handling on the backend
-  });
+    } catch (err) {
+      toast.error('Google login failed.');
+    }
+  },
+  onError: () => toast.error('Google login failed'),
+  flow: 'auth-code',
+});
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
