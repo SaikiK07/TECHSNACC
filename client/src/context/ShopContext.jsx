@@ -119,22 +119,31 @@ const ShopContextProvider = (props) => {
   };
 
   const getAuthState = async (customToken = token) => {
-    try {
-      const res = await axios.get(backendUrl + '/api/auth/is-auth', {
-        headers: { token: customToken }
-      });
-      if (res.data.success) {
-        setIsLoggedin(true);
-        await getUserData(customToken);
-      } else {
-        setIsLoggedin(false);
-        setUserData(null);
-      }
-    } catch (err) {
+  try {
+    const res = await axios.get(backendUrl + '/api/auth/is-auth', {
+      headers: { token: customToken }
+    });
+    if (res.data.success) {
+      setIsLoggedin(true);
+      await getUserData(customToken);
+    } else {
       setIsLoggedin(false);
       setUserData(null);
     }
-  };
+  } catch (err) {
+    if (err.response?.status === 401) {
+      toast.error('Session expired. Please login again.');
+      localStorage.removeItem('token');
+      setToken('');
+      setIsLoggedin(false);
+      setUserData(null);
+      navigate('/login');
+    } else {
+      console.error('Auth error:', err);
+    }
+  }
+};
+
 
   useEffect(() => {
     const localToken = localStorage.getItem('token');
